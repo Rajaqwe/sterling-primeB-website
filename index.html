@@ -599,7 +599,12 @@
             .logo-container img { height: 40px; }
             header.scrolled .logo-container img { height: 35px; }
             .nav-links a { font-size: 0.9rem; margin-right: 10px; }
-            .hero { padding-top: 120px; min-height: 400px; }
+            .nav-links a[href="#gallery"] { display: none; } /* Hide Products link on mobile */
+            
+            /* Hero Optimizations */
+            .hero { padding: 120px 15px 60px; min-height: auto; }
+            .hero h1 { font-size: 2rem; margin-bottom: 15px; line-height: 1.2; }
+            .hero p { font-size: 1.1rem; line-height: 1.5; }
             
             /* Gallery Optimizations */
             .gallery-grid { 

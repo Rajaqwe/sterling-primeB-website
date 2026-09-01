@@ -634,12 +634,14 @@
             .value-icon { width: 30px; height: 30px; font-size: 1rem; }
             .value-text h4 { font-size: 0.85rem; }
             .value-text p { font-size: 0.75rem; }
+            
+            /* Company Details Optimizations */
             .company-details { padding: 20px 10px; margin-top: 20px; }
             .company-details h3 { font-size: 1.2rem; }
-            .detail-row { padding: 10px 0; }
-            .detail-icon { width: 30px; height: 30px; font-size: 0.9rem; margin: 0 auto 5px; }
-            .detail-label { font-size: 0.85rem; margin-bottom: 2px; }
-            .detail-value { font-size: 0.8rem; }
+            .detail-row { flex-direction: row; text-align: left; padding: 10px 0; align-items: flex-start; }
+            .detail-icon { width: 30px; height: 30px; font-size: 0.9rem; margin: 0 10px 0 0; flex-shrink: 0; }
+            .detail-label { width: 100px; font-size: 0.85rem; margin-bottom: 0; flex-shrink: 0; }
+            .detail-value { font-size: 0.8rem; word-break: break-word; }
 
             /* Footer Optimizations */
             footer { padding: 30px 15px 20px; }
@@ -661,8 +663,11 @@
                 width: 40px;
                 height: 40px;
                 bottom: 75px;
-                right: 20px; /* Aligned over whatsapp button */
+                right: 20px;
                 font-size: 18px;
+            }
+            .back-to-top.show {
+                animation: floatUpAndDown 3s ease-in-out infinite !important;
             }
         }
     </style>

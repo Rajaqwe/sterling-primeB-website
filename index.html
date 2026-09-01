@@ -586,38 +586,59 @@
             .detail-row { flex-direction: column; text-align: center; }
             .detail-icon { margin: 0 auto 10px; }
             .detail-label { width: 100%; margin-bottom: 5px; }
-            header { padding: 15px 20px; flex-direction: column; gap: 15px; position: relative; background: white; }
-            .hero { padding-top: 50px; }
             
-            /* Mobile Gallery tweaks for 2 columns */
+            /* Header Optimizations */
+            header { 
+                padding: 10px 15px; 
+                flex-direction: row; 
+                position: fixed; 
+                background: rgba(255, 255, 255, 0.95); 
+                backdrop-filter: blur(10px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            }
+            .logo-container img { height: 40px; }
+            header.scrolled .logo-container img { height: 35px; }
+            .nav-links a { font-size: 0.9rem; margin-right: 10px; }
+            .hero { padding-top: 120px; min-height: 400px; }
+            
+            /* Gallery Optimizations */
             .gallery-grid { 
                 grid-template-columns: repeat(2, 1fr); 
                 gap: 10px; 
             }
-            .img-wrapper { 
-                height: 140px; /* smaller images for mobile */
-            }
-            .product-info {
-                padding: 10px;
-            }
-            .product-name {
-                font-size: 0.8rem;
-            }
+            .img-wrapper { height: 140px; }
+            .product-info { padding: 10px; }
+            .product-name { font-size: 0.8rem; }
             .gallery-section { padding: 40px 10px; }
 
-            /* Shrink floating buttons on mobile and move to edge */
+            /* Why Choose Us Optimizations */
+            .why-choose { padding: 40px 15px; margin: 30px 0; }
+            .why-grid { gap: 15px; margin: 30px auto 0; }
+            .why-item { min-width: 140px; padding: 20px 10px; }
+            .why-item i { font-size: 2rem; margin-bottom: 10px; }
+            .why-item h4 { font-size: 0.9rem; }
+
+            /* About Us Optimizations */
+            .about-section { padding: 40px 15px; }
+            .about-box { padding: 25px 15px; }
+            .about-box h3 { font-size: 1.4rem; }
+            .about-box p { font-size: 0.95rem; }
+            .value-icon { width: 35px; height: 35px; font-size: 1.2rem; }
+            .company-details { padding: 25px 15px; }
+
+            /* Shrink floating buttons on mobile and move further down/right */
             .whatsapp-float {
                 width: 50px;
                 height: 50px;
-                bottom: 20px;
-                right: 20px;
+                bottom: 15px;
+                right: 15px;
                 font-size: 28px;
             }
             .back-to-top {
                 width: 40px;
                 height: 40px;
-                bottom: 85px;
-                right: 25px; /* Aligned over whatsapp button */
+                bottom: 75px;
+                right: 20px; /* Aligned over whatsapp button */
                 font-size: 18px;
             }
         }

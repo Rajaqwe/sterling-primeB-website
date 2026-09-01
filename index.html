@@ -1833,11 +1833,19 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Ensure page loads at the very top
+        // Ensure page loads at the very top (fixes issue where it jumps to #about on refresh)
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
-        window.scrollTo(0, 0);
+        window.onload = function() {
+            if (window.location.hash) {
+                // Remove the hash (like #about) from URL so it doesn't jump
+                history.replaceState("", document.title, window.location.pathname + window.location.search);
+            }
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 10);
+        };
 
         AOS.init({
             once: true,

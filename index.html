@@ -588,6 +588,22 @@
             .detail-label { width: 100%; margin-bottom: 5px; }
             header { padding: 15px 20px; flex-direction: column; gap: 15px; position: relative; background: white; }
             .hero { padding-top: 50px; }
+            
+            /* Mobile Gallery tweaks for 2 columns */
+            .gallery-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px; 
+            }
+            .img-wrapper { 
+                height: 140px; /* smaller images for mobile */
+            }
+            .product-info {
+                padding: 10px;
+            }
+            .product-name {
+                font-size: 0.8rem;
+            }
+            .gallery-section { padding: 40px 10px; }
         }
     </style>
 </head>

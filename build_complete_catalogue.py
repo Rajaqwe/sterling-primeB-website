@@ -641,7 +641,7 @@ for pid, (pname, pshort, picon) in partner_cat_meta.items():
 
 # Add Partner catalogues to their respective categories
 partner_total = 0
-for item in partner_catalogues:
+for idx, item in enumerate(partner_catalogues):
     partner_total += 1
     cid = item["cat_id"]
     if not all_categories_dict[cid]["name"]:
@@ -649,11 +649,15 @@ for item in partner_catalogues:
         all_categories_dict[cid]["short"] = item["cat_name"].split()[0]
         all_categories_dict[cid]["icon"] = item["icon"]
         
+    dedup_key = re.sub(r'[^a-z0-9]', '', item["title"].lower())
+    cover_file = f"cat_{idx+1}_{dedup_key[:30]}.jpg"
+    encoded_cover = "raw%20images/catalogue_covers/" + urllib.parse.quote(cover_file)
+        
     all_categories_dict[cid]["items"].append({
         "type": "partner_catalogue",
         "title": item["title"],
         "filename": item["raw_file"],
-        "encoded_src": "raw%20images/sterling%20company%20LOGOS/logo.svg",  # high quality brand fallback
+        "encoded_src": encoded_cover,
         "brand": item["brand"],
         "cat_id": cid,
         "cat_name": all_categories_dict[cid]["name"],
@@ -708,23 +712,21 @@ for cid, cdata in all_categories_dict.items():
             click_action = f"openLightbox('{item['encoded_src']}', '{safe_title}', '{safe_cat_name}', '{safe_brand}', true)"
         else:
             badge_html = f'<span class="product-badge brand-badge"><i class="{item["icon"]}"></i> {item["brand"]}</span>'
-            img_html = f'''<div class="img-wrapper catalogue-thumb">
-                    <div class="catalogue-icon-wrap">
-                        <i class="{item['icon']}"></i>
-                    </div>
-                    <span class="catalogue-tag-pill">B2B Catalogue PDF</span>
+            img_html = f'''<div class="img-wrapper">
+                    <img src="{item['encoded_src']}" alt="{safe_title}" loading="lazy">
+                    <span class="catalogue-tag-pill"><i class="fas fa-file-pdf"></i> Catalogue PDF</span>
                 </div>'''
             actions_html = f'''<div class="card-actions">
-                        <a href="https://wa.me/917041614713?text={wa_text}" target="_blank" class="btn-enquire" title="Request Catalogue" onclick="event.stopPropagation();">
+                        <a href="https://wa.me/917041614713?text={wa_text}" target="_blank" class="btn-enquire" title="Request Catalogue via WhatsApp" onclick="event.stopPropagation();">
                             <i class="fab fa-whatsapp"></i> Request PDF
                         </a>
-                        <button type="button" class="btn-zoom" title="Catalogue info" onclick="openLightbox('{item['encoded_src']}', '{safe_title}', '{safe_cat_name}', '{safe_brand}', false); event.stopPropagation();">
-                            <i class="fas fa-file-pdf"></i>
+                        <button type="button" class="btn-zoom" title="Preview Catalogue Cover" onclick="openLightbox('{item['encoded_src']}', '{safe_title}', '{safe_cat_name}', '{safe_brand}', true); event.stopPropagation();">
+                            <i class="fas fa-search-plus"></i>
                         </button>
                     </div>'''
-            click_action = f"openLightbox('{item['encoded_src']}', '{safe_title}', '{safe_cat_name}', '{safe_brand}', false)"
+            click_action = f"openLightbox('{item['encoded_src']}', '{safe_title}', '{safe_cat_name}', '{safe_brand}', true)"
             
-        card = f'''            <div class="product-card {'is-partner-catalogue' if not is_inhouse else 'is-inhouse'}" data-category="{cid}" data-category-name="{safe_cat_name}" data-name="{safe_title}" data-brand="{safe_brand}" data-type="{item['type']}" data-aos="fade-up" onclick="{click_action}">
+        card = f'''            <div class="product-card {'is-partner-catalogue' if not is_inhouse else 'is-inhouse'}" data-category="{cid}" data-category-name="{safe_cat_name}" data-name="{safe_title}" data-brand="{safe_brand}" data-type="{item['type']}" onclick="{click_action}">
                 {badge_html}
                 {img_html}
                 <div class="product-info">
@@ -938,11 +940,13 @@ html_content = f'''<!DOCTYPE html>
             color: var(--secondary);
         }}
 
-        /* Gallery Section */
+        /* Gallery Section - Fluid Edge-to-Edge Full Width */
         .gallery-section {{
-            padding: 50px 40px;
-            max-width: 1440px;
+            padding: 40px 24px;
+            width: 100%;
+            max-width: 98vw;
             margin: 0 auto;
+            box-sizing: border-box;
         }}
 
         .section-title {{
@@ -967,7 +971,7 @@ html_content = f'''<!DOCTYPE html>
             text-align: center;
             color: var(--text-light);
             font-size: 1.15rem;
-            max-width: 780px;
+            max-width: 860px;
             margin: 0 auto 35px;
         }}
 
@@ -1007,10 +1011,11 @@ html_content = f'''<!DOCTYPE html>
             box-shadow: 0 4px 15px rgba(230, 34, 99, 0.3);
         }}
 
-        /* Search & Filter Controls */
+        /* Search & Filter Controls - Full Width */
         .gallery-controls {{
-            max-width: 1300px;
-            margin: 0 auto 35px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto 30px;
         }}
 
         .search-wrapper {{
@@ -1135,21 +1140,23 @@ html_content = f'''<!DOCTYPE html>
             color: #ffffff;
         }}
 
-        /* Status & Count Bar */
+        /* Status & Count Bar - Full Width */
         .gallery-status-bar {{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1300px;
-            margin: 0 auto 30px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto 25px;
             padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 12px;
             border: 1px solid rgba(43, 46, 131, 0.08);
             font-size: 0.95rem;
             color: var(--text-light);
             font-weight: 500;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            box-sizing: border-box;
         }}
 
         .gallery-status-bar strong {{
@@ -1170,11 +1177,12 @@ html_content = f'''<!DOCTYPE html>
             text-decoration: underline;
         }}
 
-        /* Product & Catalogue Grid */
+        /* Product & Catalogue Grid - Fluid Responsive */
         .gallery-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 22px;
+            width: 100%;
         }}
 
         .product-card {{
@@ -1192,7 +1200,7 @@ html_content = f'''<!DOCTYPE html>
         }}
 
         .product-card:hover {{
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: 0 18px 38px rgba(0,0,0,0.12);
             border-color: rgba(230, 34, 99, 0.3);
         }}
@@ -1234,52 +1242,30 @@ html_content = f'''<!DOCTYPE html>
             height: 100%;
             object-fit: contain;
             transition: transform 0.5s ease;
-            padding: 15px;
+            padding: 12px;
         }}
 
         .product-card:hover img {{
             transform: scale(1.08);
         }}
 
-        /* Partner Catalogue Thumbnail */
-        .catalogue-thumb {{
-            background: linear-gradient(135deg, #f7f5fd, #fdf4f8, #fdf8f4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }}
-
-        .catalogue-icon-wrap {{
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: white;
-            box-shadow: 0 10px 25px rgba(43, 46, 131, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            color: var(--secondary);
-            margin-bottom: 12px;
-            transition: transform 0.4s ease;
-        }}
-
-        .product-card:hover .catalogue-icon-wrap {{
-            transform: scale(1.12) rotate(5deg);
-        }}
-
         .catalogue-tag-pill {{
-            font-size: 0.75rem;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(43, 46, 131, 0.88);
+            color: #ffffff;
+            font-size: 0.72rem;
             font-weight: 700;
-            color: var(--primary);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 12px;
-            border-radius: 15px;
-            border: 1px solid var(--border-light);
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            z-index: 2;
         }}
 
         .product-info {{
@@ -1859,17 +1845,17 @@ html_content = f'''<!DOCTYPE html>
             color: var(--secondary);
         }}
 
-        /* Floating Actions */
+        /* Floating Actions - WhatsApp on Bottom-Left */
         .whatsapp-float {{
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 28px;
+            left: 28px;
             background-color: #25D366;
             color: white;
             border-radius: 50%;
             text-align: center;
-            font-size: 35px;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            font-size: 34px;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
             z-index: 999;
             width: 60px;
             height: 60px;
@@ -1878,17 +1864,19 @@ html_content = f'''<!DOCTYPE html>
             justify-content: center;
             text-decoration: none;
             animation: pulse 2s infinite;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }}
 
         .whatsapp-float:hover {{
             transform: scale(1.1);
+            color: white;
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
         }}
 
         .back-to-top {{
             position: fixed;
-            bottom: 105px;
-            right: 35px;
+            bottom: 98px;
+            left: 33px;
             background-color: var(--primary);
             color: white;
             border-radius: 50%;
@@ -1898,7 +1886,7 @@ html_content = f'''<!DOCTYPE html>
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            box-shadow: 0 10px 25px rgba(43, 46, 131, 0.4);
+            box-shadow: 0 8px 20px rgba(43, 46, 131, 0.3);
             transition: all 0.3s ease;
             opacity: 0;
             visibility: hidden;
@@ -2021,15 +2009,15 @@ html_content = f'''<!DOCTYPE html>
             .whatsapp-float {{
                 width: 50px;
                 height: 50px;
-                bottom: 15px;
-                right: 15px;
+                bottom: 18px;
+                left: 16px;
                 font-size: 28px;
             }}
             .back-to-top {{
                 width: 42px;
                 height: 42px;
-                bottom: 75px;
-                right: 19px;
+                bottom: 76px;
+                left: 20px;
                 font-size: 18px;
             }}
         }}
@@ -2545,8 +2533,19 @@ html_content = f'''<!DOCTYPE html>
 </html>
 '''
 
+# Load and configure Chatbot from chatbot.html (positioned on bottom-right corner)
+chatbot_path = r"c:\Users\Krishana\Downloads\chatbot.html"
+with open(chatbot_path, "r", encoding="utf-8") as cb_file:
+    cb_raw = cb_file.read()
+
+# Position chatbot on bottom-right corner
+cb_code = cb_raw.replace("left:24px", "right:28px").replace("left:16px", "right:16px").replace("border-radius:16px 16px 16px 4px", "border-radius:16px 16px 4px 16px")
+
+# Inject chatbot right before </body>
+final_html = html_content.replace("</body>", f"\n{cb_code}\n</body>")
+
 output_path = os.path.join(repo_dir, "index.html")
 with open(output_path, "w", encoding="utf-8") as f:
-    f.write(html_content)
+    f.write(final_html)
 
-print(f"SUCCESS: Generated complete index.html with {total_unified_items} items across all catalogues!")
+print(f"SUCCESS: Generated complete index.html with {total_unified_items} items across all catalogues and integrated Gift Advisor Chatbot!")

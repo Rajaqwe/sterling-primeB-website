@@ -116,12 +116,24 @@ if (backToTopButton) {
     }
 
     function collectInhouse() {
+        var INHOUSE_MAP = {
+            "wooden-gifts": "wooden-handicrafts",
+            "healthcare-medical": "wellness-grooming",
+            "wellness-care": "wellness-grooming",
+            "gift-sets": "corporate-gift-sets",
+            "promotional-merch": "corporate-gift-sets",
+            "packaging-storage": "corporate-gift-sets",
+            "acrylic-displays": "office-desk",
+            "drinkware-kitchen": "drinkware-bottles"
+        };
         var cards = document.querySelectorAll("#galleryGrid .product-card.is-inhouse");
         var result = [];
         cards.forEach(function(c) {
+            var rawSlug = (c.getAttribute("data-category") || "").toLowerCase();
+            var slug = INHOUSE_MAP[rawSlug] || rawSlug;
             result.push({
                 _domNode: c,
-                _slug: (c.getAttribute("data-category") || "").toLowerCase(),
+                _slug: slug,
                 _name: (c.getAttribute("data-name") || "").toLowerCase(),
                 _brand: (c.getAttribute("data-brand") || "").toLowerCase(),
                 _type: "inhouse"

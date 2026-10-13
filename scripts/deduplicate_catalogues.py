@@ -32,62 +32,132 @@ OUT_JS   = ROOT / "catalog_data.js"
 IMG_DIR  = ROOT / "raw images" / "products"
 
 SLUG_MAP = {
-    "electronics-tech":     "Electronics & Tech",
+    "electronics-tech":     "Tech & Audio",
     "smartwatches":         "Smartwatches",
-    "drinkware-bottles":    "Drinkware & Bottles",
+    "drinkware-bottles":    "Drinkware",
     "bags-travel":          "Bags & Travel",
     "pens-writing":         "Pens & Writing",
-    "stationery-work":      "Stationery & Work",
+    "stationery-work":      "Stationery & Kits",
     "home-kitchen":         "Home & Kitchen",
-    "festive-hampers":      "Festive Hampers",
-    "apparel-lifestyle":    "Apparel & Lifestyle",
-    "wellness-grooming":    "Wellness & Grooming",
+    "festive-hampers":      "Hampers",
+    "apparel-lifestyle":    "Apparel",
+    "wellness-grooming":    "Wellness",
     "office-desk":          "Office & Desk",
-    "wooden-handicrafts":   "Wooden & Handicrafts",
+    "wooden-handicrafts":   "Wooden Gifts",
     "clocks-planners":      "Clocks & Planners",
-    "corporate-gift-sets":  "Corporate Gift Sets",
-    "luxury-premium":       "Luxury & Premium",
-    "books-learning":       "Books & Learning",
+    "corporate-gift-sets":  "Gift Sets",
+    "luxury-premium":       "Luxury",
+    "books-learning":       "Books",
+}
+
+INHOUSE_SLUG_MAP = {
+    "wooden-gifts": ("wooden-handicrafts", "Wooden Gifts"),
+    "healthcare-medical": ("wellness-grooming", "Wellness"),
+    "wellness-care": ("wellness-grooming", "Wellness"),
+    "gift-sets": ("corporate-gift-sets", "Gift Sets"),
+    "promotional-merch": ("corporate-gift-sets", "Gift Sets"),
+    "packaging-storage": ("corporate-gift-sets", "Gift Sets"),
+    "acrylic-displays": ("office-desk", "Office & Desk"),
+    "drinkware-kitchen": ("drinkware-bottles", "Drinkware"),
 }
 
 CATEGORY_RULES = [
-    (["smartwatch","smart watch","watch","wrist watch"],                "smartwatches"),
+    (["smartwatch","smart watch","fitness band","smart band"], "smartwatches"),
+    (["wall clock","table clock","desk clock","alarm clock","clock"], "clocks-planners"),
+    (["luxury","exclusive","swarovski","trophy","award","memento","gold plat","silver plat"], "luxury-premium"),
+    (["book","novel","education","magazine","reading"], "books-learning"),
     (["electronics","tech","gadget","laptop","computer","lenovo","speaker",
       "headphone","earphone","tws","neckband","earbuds","jbl","boat","noise",
       "blaupunkt","lapcare","bluetooth","wireless","usb","charger","powerbank",
-      "power bank","dash","projector","mobile","phone","xech"],           "electronics-tech"),
+      "power bank","dash","projector","mobile","phone","xech"], "electronics-tech"),
     (["drinkware","bottle","sipper","flask","mug","cup","glass","tumbler",
       "kitchenware","kitchen","lunch","tiffin","jar","canteen","aqua",
-      "melamine","borosil","milton","aquaminder"],                        "drinkware-bottles"),
+      "melamine","borosil","milton","aquaminder"], "drinkware-bottles"),
     (["bag","travel","trolley","luggage","backpack","sling","tote","pouch",
-      "wallet","samsonite","delsey","carlton","briefcase","duffel"],      "bags-travel"),
+      "wallet","samsonite","delsey","carlton","briefcase","duffel"], "bags-travel"),
     (["pen","writing","ball pen","roller","fountain","stylus","marker",
-      "parker","lamy","cross","waterman","sheaffer","artline"],           "pens-writing"),
+      "parker","lamy","cross","waterman","sheaffer","artline"], "pens-writing"),
     (["stationery","notebook","diary","planner","notepad","file","folder",
-      "clipboard","paper","memo","sticky","post-it","calendar","agenda",
-      "year book","yearly"],                                              "stationery-work"),
-    (["home","kitchen","dining","table","candle","photo frame","decor",
+      "clipboard","paper","memo","sticky","post-it","agenda",
+      "year book","yearly"], "stationery-work"),
+    (["home","dining","table","candle","photo frame","decor",
       "vase","showpiece","tray","plate","spoon","cutlery","coaster",
-      "cushion","towel","bedsheet","linen"],                             "home-kitchen"),
-    (["hamper","festive","diwali","christmas","eid","holi","gift set",
-      "chocolate","gourmet","dry fruit","food","laddoo","namkeen","fnp",
-      "potli","basket","box set","gift box"],                            "festive-hampers"),
+      "cushion","towel","bedsheet","linen"], "home-kitchen"),
     (["apparel","lifestyle","t-shirt","tshirt","shirt","polo","hoodie",
       "jacket","cap","hat","clothing","garment","raymond","lawman",
-      "parx","snitch","park avenue"],                                    "apparel-lifestyle"),
+      "parx","snitch","park avenue"], "apparel-lifestyle"),
     (["wellness","grooming","health","massager","beardo","sanitizer",
-      "care","spa","ayurved","personal care"],                           "wellness-grooming"),
+      "care","spa","ayurved","personal care"], "wellness-grooming"),
     (["office","desk","organizer","stand","holder","paperweight","acrylic",
-      "mdf","pen stand","business card","card holder","stamp","seal"],   "office-desk"),
+      "mdf","pen stand","business card","card holder","stamp","seal"], "office-desk"),
     (["wooden","wood","handicraft","handcraft","bamboo","eco","sustainable",
       "german silver","brass","metal art","idol","god","ganesh","deity",
-      "statue","figurine","trophy","award"],                             "wooden-handicrafts"),
-    (["clock","alarm","timer","calendar","date"],                        "clocks-planners"),
-    (["corporate gift","gift set","kit","combo","set","bundle"],         "corporate-gift-sets"),
-    (["luxury","premium","exclusive","high-end","vip","elite","gold",
-      "silver plat","crystal","leather"],                                "luxury-premium"),
-    (["book","learning","education","novel","magazine"],                 "books-learning"),
+      "statue","figurine"], "wooden-handicrafts"),
+    (["corporate gift","joining kit","welcome kit","gift set","box set","gift box","combo","kit","bundle"], "corporate-gift-sets"),
+    (["hamper","festive","diwali","christmas","eid","holi",
+      "chocolate","gourmet","dry fruit","food","laddoo","namkeen","fnp",
+      "potli","basket","mithai","sweets"], "festive-hampers"),
 ]
+
+COVER_TITLE_PATTERNS = [
+    r'\bcatalogue\s*\d*\b',
+    r'\bcatalog\s*\d*\b',
+    r'\bbrochure\b',
+    r'\bdiwali\s*gifting\b',
+    r'\bgifting\s*edit\b',
+    r'\bcorporate\s*gifting\b',
+    r'\bportfolio\b',
+    r'\bcollection\s*202\d\b',
+    r'\bannual\s*catalogue\b',
+    r'\bprice\s*list\b',
+    r'\bslide\s*01\b',
+    r'\brepresentative\s*images\s*only\b',
+    r'\bcall\s*or\s*whatsapp\b',
+    r'\bterms\s*&\s*conditions\b',
+    r'\bpowered\s*by\b'
+]
+
+def is_catalogue_cover(rec: dict, cover_dhashes: dict = None, img_dh: int = None) -> bool:
+    title = (rec.get("title") or rec.get("name") or "").strip()
+    model = (rec.get("model_number") or rec.get("model") or "").strip()
+    brand = (rec.get("brand") or "").strip()
+    page_num = rec.get("page_number", 0)
+    src_pdf = rec.get("source_pdf", "")
+    img_rel = (rec.get("image_path") or rec.get("image") or "").strip()
+
+    # 1. Direct path check
+    if "catalogue_covers" in img_rel.lower() or "cat_" in img_rel.lower():
+        return True
+
+    # 2. Bonus asset covers
+    if not src_pdf.lower().endswith(".pdf"):
+        if any(k in title.lower() for k in ["catalogue", "catalog", "mrp 01", "brochure"]):
+            return True
+
+    # 3. Title patterns
+    for pat in COVER_TITLE_PATTERNS:
+        if re.search(pat, title, re.IGNORECASE):
+            return True
+
+    # 4. Generic placeholder covers
+    if model.endswith("-P01-01") or model.endswith("-S01-01") or "p01_01" in img_rel.lower():
+        return True
+    if any(title == f"{brand} Product {i}" for i in range(1, 25)):
+        return True
+    if title.upper() in [
+        "PRODUCT", "MODEL NO.", "MRP :", "MODEL NO", "2002", "INCLUDES", "2026",
+        "DURABLE", "UNBREAKABLE SHELL", "MEDIUM", "PP COLLECTION", "FREE SHOE BAG",
+        "PACK OF 3", "A V A I L A B L E S I Z E S", "WOMEN’S", "MOQ -500", "SKU", "THE GIFT"
+    ]:
+        return True
+
+    # 5. dHash match against the 335 covers
+    if cover_dhashes and img_dh is not None:
+        for cdh in cover_dhashes.values():
+            if hamming(img_dh, cdh) <= 2:
+                return True
+
+    return False
 
 def compute_canonical_model(code: str) -> str:
     """Strips all non-alphanumeric characters and converts to uppercase."""
@@ -160,8 +230,15 @@ def extract_inhouse_products() -> list[dict]:
     for idx, card in enumerate(cards, 1):
         name = card.get("data-name", "")
         brand = card.get("data-brand", "Sterling Prime In-House")
-        cat_slug = card.get("data-category", "office-desk")
-        cat_name = card.get("data-category-name", "Office & Desk Essentials")
+        raw_slug = card.get("data-category", "office-desk")
+        raw_cat_name = card.get("data-category-name", "Office & Desk Essentials")
+        
+        if raw_slug in INHOUSE_SLUG_MAP:
+            cat_slug, cat_name = INHOUSE_SLUG_MAP[raw_slug]
+        else:
+            cat_slug = raw_slug
+            cat_name = SLUG_MAP.get(cat_slug, raw_cat_name)
+
         img_elem = card.select_one("img")
         img_src = img_elem.get("src", "") if img_elem else ""
 
@@ -197,6 +274,18 @@ def main():
         raw_partner = json.load(f)
     print(f"      {len(raw_partner):,} raw partner records loaded")
 
+    # 2.5 Pre-compute cover dhashes for 335 covers (Requirement R1)
+    COVERS_DIR = ROOT / "raw images" / "catalogue_covers"
+    cover_dhashes: dict[pathlib.Path, int] = {}
+    if COVERS_DIR.exists():
+        for f in os.listdir(COVERS_DIR):
+            if f.lower().endswith((".jpg", ".jpeg", ".png")):
+                fp = COVERS_DIR / f
+                dh = dhash(fp)
+                if dh is not None:
+                    cover_dhashes[fp] = dh
+    print(f"      Loaded {len(cover_dhashes)} cover dhashes from {COVERS_DIR.name}")
+
     # 3. Deduplicate partner products
     print(f"\n[3/5] Deduplicating partner products …")
     seen_canonical_model: set[str] = set()
@@ -222,8 +311,14 @@ def main():
         img_path = ROOT / img_rel if img_rel else None
 
         # Check image exists on disk
-        if img_path and not img_path.exists():
-            img_path = None
+        if not img_path or not img_path.exists():
+            dup_count += 1
+            continue
+
+        # R1: Multi-attribute Cover Purge check (Text / Model / Metadata)
+        if is_catalogue_cover(rec, cover_dhashes=None, img_dh=None):
+            dup_count += 1
+            continue
 
         # T1: Canonical Brand + Model exact match (Strict Project Contract)
         b_code = compute_canonical_model(brand)
@@ -250,6 +345,11 @@ def main():
                 img_cache[img_rel] = dhash(img_path)
             dh = img_cache[img_rel]
             if dh is not None:
+                # R1: Multi-attribute Cover Purge check (Perceptual dHash <= 2 against 335 covers)
+                if is_catalogue_cover(rec, cover_dhashes=cover_dhashes, img_dh=dh):
+                    dup_count += 1
+                    continue
+
                 is_dup = False
                 for (existing_hash, _) in seen_dhash:
                     if hamming(dh, existing_hash) <= 5:

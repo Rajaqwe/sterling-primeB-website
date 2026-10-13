@@ -68,10 +68,29 @@ def main():
         print("ERROR: #galleryGrid not found in index.html")
         sys.exit(1)
 
+    INHOUSE_SLUG_MAP = {
+        "wooden-gifts": ("wooden-handicrafts", "Wooden Gifts"),
+        "healthcare-medical": ("wellness-grooming", "Wellness"),
+        "wellness-care": ("wellness-grooming", "Wellness"),
+        "gift-sets": ("corporate-gift-sets", "Gift Sets"),
+        "promotional-merch": ("corporate-gift-sets", "Gift Sets"),
+        "packaging-storage": ("corporate-gift-sets", "Gift Sets"),
+        "acrylic-displays": ("office-desk", "Office & Desk"),
+        "drinkware-kitchen": ("drinkware-bottles", "Drinkware"),
+    }
+
     # Empty the grid and re-add in-house cards and noResults
     no_results = soup.select_one("#noResults")
     grid.clear()
     for card in inhouse_cards:
+        old_slug = card.get("data-category", "")
+        if old_slug in INHOUSE_SLUG_MAP:
+            new_slug, new_name = INHOUSE_SLUG_MAP[old_slug]
+            card["data-category"] = new_slug
+            card["data-category-name"] = new_name
+            badge = card.select_one(".product-badge")
+            if badge:
+                badge.string = new_name
         grid.append(card)
     if no_results:
         grid.append(no_results)
@@ -110,20 +129,19 @@ def main():
         all_btn.append(span_count)
         cat_bar.append(all_btn)
 
-        # Other category pills
-        for slug in sorted(cat_counts.keys(), key=lambda s: -cat_counts[s]):
-            if slug in cat_display:
-                icon_cls, label_text = cat_display[slug]
-                cnt = cat_counts[slug]
-                btn = soup.new_tag("button", attrs={"class": "cat-btn", "data-cat": slug, "data-cat-name": label_text})
-                btn.append(soup.new_tag("i", attrs={"class": icon_cls}))
-                s_lbl = soup.new_tag("span")
-                s_lbl.string = label_text
-                btn.append(s_lbl)
-                s_cnt = soup.new_tag("span", attrs={"class": "cat-count", "id": f"count-{slug}"})
-                s_cnt.string = f"{cnt:,}"
-                btn.append(s_cnt)
-                cat_bar.append(btn)
+        # Render all 16 canonical category pills sorted by count descending
+        for slug in sorted(cat_display.keys(), key=lambda s: -cat_counts.get(s, 0)):
+            icon_cls, label_text = cat_display[slug]
+            cnt = cat_counts.get(slug, 0)
+            btn = soup.new_tag("button", attrs={"class": "cat-btn", "data-cat": slug, "data-cat-name": label_text})
+            btn.append(soup.new_tag("i", attrs={"class": icon_cls}))
+            s_lbl = soup.new_tag("span")
+            s_lbl.string = label_text
+            btn.append(s_lbl)
+            s_cnt = soup.new_tag("span", attrs={"class": "cat-count", "id": f"count-{slug}"})
+            s_cnt.string = f"{cnt:,}"
+            btn.append(s_cnt)
+            cat_bar.append(btn)
 
     # 5. Extract Aanya chatbot block (style + div + script) to preserve
     chatbot_elements = []

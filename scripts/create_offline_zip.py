@@ -75,11 +75,9 @@ def create_archive(dest_path: pathlib.Path):
                 for f in logos_dir.glob("*.*"):
                     z.write(f, arcname=f"raw images/sterling company LOGOS/{f.name}")
 
-            # Catalogue covers
-            covers_dir = raw_img_dir / "catalogue_covers"
-            if covers_dir.exists():
-                for f in covers_dir.glob("*.*"):
-                    z.write(f, arcname=f"raw images/catalogue_covers/{f.name}")
+            # Catalogue covers (Excluded per Requirement R1)
+            # covers_dir = raw_img_dir / "catalogue_covers"
+            # Excluded from distribution archive
 
             # 5. Add all referenced partner product images
             products_dir = raw_img_dir / "products"

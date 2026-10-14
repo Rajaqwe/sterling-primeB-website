@@ -131,13 +131,26 @@ if (backToTopButton) {
         cards.forEach(function(c) {
             var rawSlug = (c.getAttribute("data-category") || "").toLowerCase();
             var slug = INHOUSE_MAP[rawSlug] || rawSlug;
-            result.push({
+            var item = {
                 _domNode: c,
                 _slug: slug,
                 _name: (c.getAttribute("data-name") || "").toLowerCase(),
                 _brand: (c.getAttribute("data-brand") || "").toLowerCase(),
-                _type: "inhouse"
-            });
+                _type: "inhouse",
+                _imageFailed: false
+            };
+            var productImage = c.querySelector(".img-wrapper img");
+            if (!productImage) {
+                item._imageFailed = true;
+                if (c.parentNode) c.parentNode.removeChild(c);
+            } else {
+                productImage.addEventListener("error", function () {
+                    item._imageFailed = true;
+                    if (c.parentNode) c.parentNode.removeChild(c);
+                    applyFilters();
+                }, { once: true });
+            }
+            result.push(item);
         });
         return result;
     }
@@ -150,7 +163,11 @@ if (backToTopButton) {
         var catName = p.category_name || p.category || "Corporate Gift";
         var waText = encodeURIComponent("Hi Sterling Prime, I would like a quotation for:\n\n*" + brand + " - " + name + "*\nCategory: " + catName);
         var waUrl = "https://wa.me/917041614713?text=" + waText;
-        var imgSrc = img ? img : "raw%20images/placeholder.jpg";
+        if (!img) {
+            p._imageFailed = true;
+            return null;
+        }
+        var imgSrc = img;
 
         var card = document.createElement("div");
         card.className = "product-card is-partner";
@@ -159,6 +176,7 @@ if (backToTopButton) {
         card.setAttribute("data-name", name);
         card.setAttribute("data-brand", brand);
         card.setAttribute("data-type", "partner_product");
+        card.setAttribute("data-product-id", p.id || "");
         card.setAttribute("data-img", imgSrc);
         card.setAttribute("onclick", "openLightbox(this.getAttribute('data-img'), this.getAttribute('data-name'), this.getAttribute('data-category-name'), this.getAttribute('data-brand'), true);");
 
@@ -179,6 +197,13 @@ if (backToTopButton) {
                     "</button>" +
                 "</div>" +
             "</div>";
+        var partnerImage = card.querySelector(".img-wrapper img");
+        if (partnerImage) {
+            partnerImage.addEventListener("error", function () {
+                p._imageFailed = true;
+                applyFilters();
+            }, { once: true });
+        }
         return card;
     }
 
@@ -196,7 +221,8 @@ if (backToTopButton) {
         for (var i = rendered; i < end; i++) {
             var item = filtered[i];
             if (!item._domNode) {
-                fragment.appendChild(buildCard(item));
+                var card = buildCard(item);
+                if (card) fragment.appendChild(card);
             }
         }
         rendered = end;
@@ -233,12 +259,27 @@ if (backToTopButton) {
         observer.observe(sentinel);
     }
 
+    function updateViewModeCounts() {
+        var validProducts = allProducts.filter(function (p) { return !p._imageFailed; });
+        var counts = {
+            all: validProducts.length,
+            inhouse: validProducts.filter(function (p) { return !!p._domNode; }).length,
+            partner_catalogue: validProducts.filter(function (p) { return !p._domNode; }).length
+        };
+        document.querySelectorAll(".view-mode-btn[data-type-filter]").forEach(function (btn) {
+            var countEl = btn.querySelector("[data-view-count]");
+            if (!countEl) return;
+            var key = btn.getAttribute("data-type-filter");
+            countEl.textContent = (counts[key] || 0).toLocaleString();
+        });
+    }
+
     function updateStatusText() {
         var countEl = document.getElementById("productCount");
         if (!countEl) return;
 
         var visibleInhouse = allProducts.filter(function(p) {
-            return p._domNode && p._domNode.style.display !== "none";
+            return p._domNode && !p._imageFailed && p._domNode.style.display !== "none";
         }).length;
         var totalMatches = visibleInhouse + filtered.length;
 
@@ -261,7 +302,7 @@ if (backToTopButton) {
         // 1. Toggle static in-house cards
         allProducts.forEach(function(p) {
             if (p._domNode) {
-                var show = true;
+                var show = !p._imageFailed;
                 if (catSlug !== "all" && p._slug !== catSlug) show = false;
                 if (typeF === "partner_product" || typeF === "partner_catalogue") show = false;
                 if (query) {
@@ -275,6 +316,7 @@ if (backToTopButton) {
         // 2. Filter partner catalog items
         filtered = allProducts.filter(function(p) {
             if (p._domNode) return false;
+            if (p._imageFailed || !(p.image || p.image_path)) return false;
             if (catSlug !== "all" && p._slug !== catSlug) return false;
             if (typeF === "inhouse") return false;
             if (query) {
@@ -310,6 +352,7 @@ if (backToTopButton) {
         }
 
         updateStatusText();
+        updateViewModeCounts();
 
         var resetBtn = document.getElementById("resetFilterBtn");
         if (resetBtn) {
@@ -336,6 +379,7 @@ if (backToTopButton) {
         });
 
         allProducts = inhouse.concat(partnerAll);
+        updateViewModeCounts();
 
         // Calculate dynamic pill counts
         var catCounts = {};

@@ -234,42 +234,6 @@
             margin: 0 auto 35px;
         }
 
-        /* View Mode Filter Tabs */
-        .view-mode-bar {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 0 auto 30px;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 6px;
-            border-radius: 50px;
-            border: 1px solid rgba(43, 46, 131, 0.1);
-        }
-
-        .view-mode-btn {
-            flex: 1;
-            padding: 10px 18px;
-            border: none;
-            background: transparent;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.95rem;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .view-mode-btn.active {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(230, 34, 99, 0.3);
-        }
-
         /* Search & Filter Controls - Full Width */
         .gallery-controls {
             width: 100%;
@@ -1211,15 +1175,6 @@
             .gallery-section { padding: 35px 15px; }
             .section-title { font-size: 2rem; }
 
-            .view-mode-bar {
-                flex-direction: column;
-                border-radius: 16px;
-                padding: 8px;
-            }
-            .view-mode-btn {
-                font-size: 0.85rem;
-                padding: 8px 12px;
-            }
             
             .category-filter-bar {
                 display: flex;
@@ -1320,18 +1275,6 @@
 <div class="gallery-section" id="gallery">
 <h2 class="section-title" data-aos="fade-up">Corporate Gifting Range &amp; Catalogues</h2>
 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Explore our unified collection of in-house corporate gifts and curated brand partner catalogues across all categories. Strictly deduplicated so you get the best options at every price slab.</p>
-<!-- View Mode Filter Bar (All / In-House / Partner Brands) -->
-<div class="view-mode-bar" data-aos="fade-up" data-aos-delay="120">
-<button class="view-mode-btn active" data-type-filter="all" type="button">
-<i class="fas fa-layer-group"></i> All Items (<span data-view-count="all">5,810</span>)
-            </button>
-<button class="view-mode-btn" data-type-filter="inhouse" type="button">
-<i class="fas fa-gem"></i> In-House Products (<span data-view-count="inhouse">171</span>)
-            </button>
-<button class="view-mode-btn" data-type-filter="partner_catalogue" type="button">
-<i class="fas fa-book-open"></i> Partner Products (<span data-view-count="partner_catalogue">5,639</span>)
-            </button>
-</div>
 <!-- Controls: Search & Category Filter Pills -->
 <div class="gallery-controls" data-aos="fade-up" data-aos-delay="150">
 <!-- Search Bar -->
@@ -4731,21 +4674,6 @@ if (backToTopButton) {
         observer.observe(sentinel);
     }
 
-    function updateViewModeCounts() {
-        var validProducts = allProducts.filter(function (p) { return !p._imageFailed; });
-        var counts = {
-            all: validProducts.length,
-            inhouse: validProducts.filter(function (p) { return !!p._domNode; }).length,
-            partner_catalogue: validProducts.filter(function (p) { return !p._domNode; }).length
-        };
-        document.querySelectorAll(".view-mode-btn[data-type-filter]").forEach(function (btn) {
-            var countEl = btn.querySelector("[data-view-count]");
-            if (!countEl) return;
-            var key = btn.getAttribute("data-type-filter");
-            countEl.textContent = (counts[key] || 0).toLocaleString();
-        });
-    }
-
     function updateStatusText() {
         var countEl = document.getElementById("productCount");
         if (!countEl) return;
@@ -4768,7 +4696,6 @@ if (backToTopButton) {
 
     function applyFilters() {
         var catSlug = (window._activeCat || "all");
-        var typeF = (window._activeType || "all");
         var query = ((document.getElementById("productSearch") || {}).value || "").toLowerCase().trim();
 
         // 1. Toggle static in-house cards
@@ -4776,7 +4703,6 @@ if (backToTopButton) {
             if (p._domNode) {
                 var show = !p._imageFailed;
                 if (catSlug !== "all" && p._slug !== catSlug) show = false;
-                if (typeF === "partner_product" || typeF === "partner_catalogue") show = false;
                 if (query) {
                     var haystack = p._name + " " + p._brand + " " + p._slug;
                     if (haystack.indexOf(query) === -1) show = false;
@@ -4790,7 +4716,6 @@ if (backToTopButton) {
             if (p._domNode) return false;
             if (p._imageFailed || !(p.image || p.image_path)) return false;
             if (catSlug !== "all" && p._slug !== catSlug) return false;
-            if (typeF === "inhouse") return false;
             if (query) {
                 var haystack = ((p.name || "") + " " + (p.brand || "") + " " + (p.category || "") + " " + (p.category_slug || "") + " " + (p.description || "")).toLowerCase();
                 if (haystack.indexOf(query) === -1) return false;
@@ -4824,11 +4749,10 @@ if (backToTopButton) {
         }
 
         updateStatusText();
-        updateViewModeCounts();
 
         var resetBtn = document.getElementById("resetFilterBtn");
         if (resetBtn) {
-            if (catSlug !== "all" || typeF !== "all" || query) {
+            if (catSlug !== "all" || query) {
                 resetBtn.style.display = "inline-block";
             } else {
                 resetBtn.style.display = "none";
@@ -4851,7 +4775,6 @@ if (backToTopButton) {
         });
 
         allProducts = inhouse.concat(partnerAll);
-        updateViewModeCounts();
 
         // Calculate dynamic pill counts
         var catCounts = {};
@@ -4886,16 +4809,6 @@ if (backToTopButton) {
             });
         });
 
-        // View mode buttons click
-        document.querySelectorAll(".view-mode-btn[data-type-filter]").forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                document.querySelectorAll(".view-mode-btn").forEach(function(b) { b.classList.remove("active"); });
-                btn.classList.add("active");
-                window._activeType = btn.getAttribute("data-type-filter");
-                applyFilters();
-            });
-        });
-
         // Search input
         if (search) {
             search.addEventListener("input", function() {
@@ -4921,7 +4834,6 @@ if (backToTopButton) {
         }
 
         window._activeCat = "all";
-        window._activeType = "all";
         applyFilters();
     }
 
@@ -4930,17 +4842,12 @@ if (backToTopButton) {
         var allBtn = document.querySelector(".cat-btn[data-cat=\"all\"]");
         if (allBtn) allBtn.classList.add("active");
 
-        document.querySelectorAll(".view-mode-btn").forEach(function(b) { b.classList.remove("active"); });
-        var allType = document.querySelector(".view-mode-btn[data-type-filter=\"all\"]");
-        if (allType) allType.classList.add("active");
-
         var s = document.getElementById("productSearch");
         if (s) s.value = "";
         var clearBtn = document.getElementById("clearSearch");
         if (clearBtn) clearBtn.style.display = "none";
 
         window._activeCat = "all";
-        window._activeType = "all";
         applyFilters();
     };
 

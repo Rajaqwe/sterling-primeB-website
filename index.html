@@ -364,65 +364,6 @@
         }
 
         
-        /* Filter Mode Switcher */
-        .filter-mode-switch {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin: 18px 0 16px;
-            flex-wrap: wrap;
-        }
-
-        .mode-tab-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            padding: 10px 24px;
-            border-radius: 50px;
-            border: 1.5px solid rgba(43, 46, 131, 0.16);
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.96rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
-            user-select: none;
-        }
-
-        .mode-tab-btn i {
-            font-size: 1rem;
-            color: var(--tertiary);
-            transition: color 0.3s ease;
-        }
-
-        .mode-tab-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--secondary);
-            box-shadow: 0 6px 20px rgba(230, 34, 99, 0.16);
-        }
-
-        .mode-tab-btn.active {
-            background: var(--gradient);
-            color: #ffffff;
-            border-color: transparent;
-            box-shadow: 0 8px 24px rgba(230, 34, 99, 0.32);
-            transform: translateY(-2px);
-        }
-
-        .mode-tab-btn.active i {
-            color: #ffffff;
-        }
-
-        .brand-filter-bar {
-            display: none;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
         /* Status & Count Bar - Full Width */
         .gallery-status-bar {
             display: flex;
@@ -1343,35 +1284,7 @@
 <button class="clear-search-btn" id="clearSearch" title="Clear search" type="button"><i class="fas fa-times"></i></button>
 </div>
 <!-- Category Pills Bar -->
-<!-- Filter Mode Switcher: Categories vs Featured Brands -->
-<div class="filter-mode-switch">
-<button class="mode-tab-btn active" id="btnModeCategories" onclick="switchFilterMode('categories')" type="button">
-<i class="fas fa-th-large"></i><span>Browse Categories (24)</span>
-</button>
-<button class="mode-tab-btn" id="btnModeBrands" onclick="switchFilterMode('brands')" type="button">
-<i class="fas fa-award"></i><span>Featured Brands (14)</span>
-</button>
-</div>
-<div class="category-filter-bar" id="categoryFilterBar"><button class="cat-btn active" data-cat="all" data-cat-name="All 24 Categories" type="button"><i class="fas fa-th-large"></i><span>All Items</span><span class="cat-count" id="count-all">5,575</span></button><button class="cat-btn" data-cat="audio-speakers" data-cat-name="Audio &amp; Bluetooth Speakers" title="1. Audio &amp; Bluetooth Speakers — Earbuds, TWS, Neckbands, Portable Bluetooth Speakers, Soundbars" type="button"><i class="fas fa-volume-up"></i><span>Audio &amp; Bluetooth Speakers</span><span class="cat-count" id="count-audio-speakers">204</span></button><button class="cat-btn" data-cat="power-charging" data-cat-name="Power &amp; Charging Gadgets" title="2. Power &amp; Charging Gadgets — Powerbanks, Multi-pin Charging Cables, Wireless Chargers, Adapters" type="button"><i class="fas fa-battery-full"></i><span>Power &amp; Charging Gadgets</span><span class="cat-count" id="count-power-charging">322</span></button><button class="cat-btn" data-cat="smart-tech-accessories" data-cat-name="Smart Tech &amp; Computer Accessories" title="3. Smart Tech &amp; Computer Accessories — Smartwatches, Wireless Mouse, Keyboards, USB Pendrives, Dash Cams" type="button"><i class="fas fa-laptop-code"></i><span>Smart Tech &amp; Computer Accessories</span><span class="cat-count" id="count-smart-tech-accessories">319</span></button><button class="cat-btn" data-cat="bottles-sippers-flasks" data-cat-name="Bottles, Sippers &amp; Flasks" title="4. Bottles, Sippers &amp; Flasks — Stainless Steel Vacuum Flasks, Temperature Bottles, Sports Sippers" type="button"><i class="fas fa-tint"></i><span>Bottles, Sippers &amp; Flasks</span><span class="cat-count" id="count-bottles-sippers-flasks">86</span></button><button class="cat-btn" data-cat="mugs-cups-glassware" data-cat-name="Mugs, Cups &amp; Glassware" title="5. Mugs, Cups &amp; Glassware — Ceramic Coffee Mugs, Travel Tumblers, Borosil Glassware, Tea Sets" type="button"><i class="fas fa-mug-hot"></i><span>Mugs, Cups &amp; Glassware</span><span class="cat-count" id="count-mugs-cups-glassware">187</span></button><button class="cat-btn" data-cat="copperware-traditional" data-cat-name="Copperware &amp; Traditional Metals" title="6. Copperware &amp; Traditional Metals — Hammered Copper Bottles, Tumbler Sets, Brass &amp; Kansa Sets" type="button"><i class="fas fa-burn"></i><span>Copperware &amp; Traditional Metals</span><span class="cat-count" id="count-copperware-traditional">39</span></button><button class="cat-btn" data-cat="home-appliances-cookware" data-cat-name="Home Appliances &amp; Cookware" title="7. Home Appliances &amp; Cookware — Wonderchef Pans, Electric Kettles, Blenders, Toasters, Casseroles" type="button"><i class="fas fa-blender"></i><span>Home Appliances &amp; Cookware</span><span class="cat-count" id="count-home-appliances-cookware">468</span></button><button class="cat-btn" data-cat="dining-lunch-boxes" data-cat-name="Dining Sets &amp; Lunch Boxes" title="8. Dining Sets &amp; Lunch Boxes — Melamine Dinner Sets, Bento Lunch Boxes, Insulated Tiffins, Cutlery" type="button"><i class="fas fa-utensils"></i><span>Dining Sets &amp; Lunch Boxes</span><span class="cat-count" id="count-dining-lunch-boxes">296</span></button><button class="cat-btn" data-cat="barware-cocktail" data-cat-name="Barware &amp; Cocktail Sets" title="9. Barware &amp; Cocktail Sets — Luxury Bar Sets, Cocktail Shakers, Wine Openers, Ice Buckets, Decanters" type="button"><i class="fas fa-wine-glass-alt"></i><span>Barware &amp; Cocktail Sets</span><span class="cat-count" id="count-barware-cocktail">86</span></button><button class="cat-btn" data-cat="pens-luxury-writing" data-cat-name="Pens &amp; Luxury Writing" title="10. Pens &amp; Luxury Writing — Executive Metal Pens, Cross / Parker / Sheaffer / Lamy Pens &amp; Duos" type="button"><i class="fas fa-pen-nib"></i><span>Pens &amp; Luxury Writing</span><span class="cat-count" id="count-pens-luxury-writing">129</span></button><button class="cat-btn" data-cat="diaries-notebooks-planners" data-cat-name="Diaries, Notebooks &amp; Planners" title="11. Diaries, Notebooks &amp; Planners — Hardbound Journals, Undated Planners, Corporate Annual Diaries" type="button"><i class="fas fa-book"></i><span>Diaries, Notebooks &amp; Planners</span><span class="cat-count" id="count-diaries-notebooks-planners">268</span></button><button class="cat-btn" data-cat="desk-organizers-stands" data-cat-name="Desk Organizers &amp; Stands" title="12. Desk Organizers &amp; Stands — Multi-utility Pen Stands, Mobile Stands, Leatherette Desk Mats" type="button"><i class="fas fa-briefcase"></i><span>Desk Organizers &amp; Stands</span><span class="cat-count" id="count-desk-organizers-stands">413</span></button><button class="cat-btn" data-cat="clocks-watches-timepieces" data-cat-name="Clocks, Watches &amp; Timepieces" title="13. Clocks, Watches &amp; Timepieces — Designer Wall Clocks, Minimalist Desk Clocks, Wristwatches" type="button"><i class="fas fa-clock"></i><span>Clocks, Watches &amp; Timepieces</span><span class="cat-count" id="count-clocks-watches-timepieces">105</span></button><button class="cat-btn" data-cat="backpacks-luggage-travel" data-cat-name="Backpacks, Luggage &amp; Travel Bags" title="14. Backpacks, Luggage &amp; Travel Bags — Laptop Backpacks, Duffle Bags, Conference Folder Bags, Trolleys" type="button"><i class="fas fa-suitcase-rolling"></i><span>Backpacks, Luggage &amp; Travel Bags</span><span class="cat-count" id="count-backpacks-luggage-travel">157</span></button><button class="cat-btn" data-cat="wallets-cardholders-pouches" data-cat-name="Wallets, Cardholders &amp; Pouches" title="15. Wallets, Cardholders &amp; Pouches — Leather Wallets, RFID Card Protectors, Passport Wallets, Tech Pouches" type="button"><i class="fas fa-wallet"></i><span>Wallets, Cardholders &amp; Pouches</span><span class="cat-count" id="count-wallets-cardholders-pouches">91</span></button><button class="cat-btn" data-cat="employee-onboarding-kits" data-cat-name="Employee Onboarding Kits" title="16. Employee Onboarding Kits — New Hire Welcome Kits, Induction Gift Boxes, Corporate Employee Sets" type="button"><i class="fas fa-user-check"></i><span>Employee Onboarding Kits</span><span class="cat-count" id="count-employee-onboarding-kits">20</span></button><button class="cat-btn" data-cat="executive-combo-sets" data-cat-name="Executive Combo Gift Sets" title="17. Executive Combo Gift Sets — Curated Pen + Diary + Bottle combos, 3-in-1 / 4-in-1 Executive Sets" type="button"><i class="fas fa-gift"></i><span>Executive Combo Gift Sets</span><span class="cat-count" id="count-executive-combo-sets">401</span></button><button class="cat-btn" data-cat="festive-hampers-gourmet" data-cat-name="Festive Hampers &amp; Gourmet Foods" title="18. Festive Hampers &amp; Gourmet Foods — Diwali Sweets, Dry Fruits, Artisanal Chocolates (Fabelle, Ferrero)" type="button"><i class="fas fa-gifts"></i><span>Festive Hampers &amp; Gourmet Foods</span><span class="cat-count" id="count-festive-hampers-gourmet">455</span></button><button class="cat-btn" data-cat="hamper-packaging-baskets" data-cat-name="Gift Hampers Packaging &amp; Baskets" title="19. Gift Hampers Packaging &amp; Baskets — Hamper Baskets, Decorative Trays, Rigid Gift Boxes, Tin Containers" type="button"><i class="fas fa-box-open"></i><span>Gift Hampers Packaging &amp; Baskets</span><span class="cat-count" id="count-hamper-packaging-baskets">706</span></button><button class="cat-btn" data-cat="divine-idols-pooja" data-cat-name="Divine Idols &amp; Pooja Gifts" title="20. Divine Idols &amp; Pooja Gifts — Gold/Silver Plated Idols, Pooja Boxes, Diyas, Incense Gift Boxes" type="button"><i class="fas fa-om"></i><span>Divine Idols &amp; Pooja Gifts</span><span class="cat-count" id="count-divine-idols-pooja">256</span></button><button class="cat-btn" data-cat="silver-brass-artifacts" data-cat-name="Silver, Brass &amp; Metallic Artifacts" title="21. Silver, Brass &amp; Metallic Artifacts — German Silver Bowls, Silver Coins, Plated Mementos, Traditional Art" type="button"><i class="fas fa-coins"></i><span>Silver, Brass &amp; Metallic Artifacts</span><span class="cat-count" id="count-silver-brass-artifacts">323</span></button><button class="cat-btn" data-cat="trophies-awards-medals" data-cat-name="Trophies, Awards &amp; Medals" title="22. Trophies, Awards &amp; Medals — Corporate Awards, Crystal Trophies, Sports &amp; Appreciation Medals" type="button"><i class="fas fa-trophy"></i><span>Trophies, Awards &amp; Medals</span><span class="cat-count" id="count-trophies-awards-medals">176</span></button><button class="cat-btn" data-cat="corporate-apparel-wearables" data-cat-name="Corporate Apparel &amp; Wearables" title="23. Corporate Apparel &amp; Wearables — Custom Embroidered Polo T-Shirts, Jackets, Caps, Windcheaters" type="button"><i class="fas fa-tshirt"></i><span>Corporate Apparel &amp; Wearables</span><span class="cat-count" id="count-corporate-apparel-wearables">92</span></button><button class="cat-btn" data-cat="healthcare-medical" data-cat-name="Healthcare &amp; Medical Communication" title="24. Healthcare &amp; Medical Communication — Clinical Organ Models, Pharma Displays, Doctor Kits, Medical Clipboards" type="button"><i class="fas fa-notes-medical"></i><span>Healthcare &amp; Medical Communication</span><span class="cat-count" id="count-healthcare-medical">22</span></button></div>
-<!-- Brand Pills Bar (14 Premier Partner Brands) -->
-<div class="category-filter-bar brand-filter-bar" id="brandFilterBar">
-<button class="cat-btn brand-btn active" data-brand="all" data-brand-name="All Featured Brands" type="button"><i class="fas fa-gem"></i><span>All Brands</span><span class="cat-count" id="count-brand-all">1,010</span></button>
-<button class="cat-btn brand-btn" data-brand="portronics" data-brand-name="Portronics" title="Portronics — Chargers, Powerbanks, Bluetooth Speakers & Tech Accessories" type="button"><i class="fas fa-bolt"></i><span>Portronics</span><span class="cat-count" id="count-brand-portronics">435</span></button>
-<button class="cat-btn brand-btn" data-brand="borosil-larah" data-brand-name="Borosil / Larah" title="Borosil & Larah — Vacuum Insulated Flasks, Cookware, Opalware Dining Sets" type="button"><i class="fas fa-coffee"></i><span>Borosil / Larah</span><span class="cat-count" id="count-brand-borosil-larah">127</span></button>
-<button class="cat-btn brand-btn" data-brand="wonderchef" data-brand-name="Wonderchef" title="Wonderchef — Nutri-Blend Mixers, Blenders, Coffee Makers & Non-Stick Cookware" type="button"><i class="fas fa-blender"></i><span>Wonderchef</span><span class="cat-count" id="count-brand-wonderchef">123</span></button>
-<button class="cat-btn brand-btn" data-brand="pebble" data-brand-name="Pebble" title="Pebble — Smartwatches, Wellness Bands, Smart Rings, TWS & Powerbanks" type="button"><i class="fas fa-stopwatch"></i><span>Pebble</span><span class="cat-count" id="count-brand-pebble">66</span></button>
-<button class="cat-btn brand-btn" data-brand="noise" data-brand-name="Noise" title="Noise — ColorFit Smartwatches, Buds VS TWS & Wireless Headphones" type="button"><i class="fas fa-headphones"></i><span>Noise</span><span class="cat-count" id="count-brand-noise">52</span></button>
-<button class="cat-btn brand-btn" data-brand="cross" data-brand-name="Cross" title="Cross — Luxury Pens, Slim Wallets & Executive Gift Combos" type="button"><i class="fas fa-pen-nib"></i><span>Cross</span><span class="cat-count" id="count-brand-cross">31</span></button>
-<button class="cat-btn brand-btn" data-brand="jbl-harman" data-brand-name="JBL / Harman" title="JBL / Harman — Go & Clip Speakers, Wave TWS, Tune Headphones & Soundbars" type="button"><i class="fas fa-volume-up"></i><span>JBL / Harman</span><span class="cat-count" id="count-brand-jbl-harman">31</span></button>
-<button class="cat-btn brand-btn" data-brand="boat" data-brand-name="boAt" title="boAt — Airdopes TWS, Rockerz Headphones & Stone Bluetooth Speakers" type="button"><i class="fas fa-music"></i><span>boAt</span><span class="cat-count" id="count-brand-boat">30</span></button>
-<button class="cat-btn brand-btn" data-brand="milton" data-brand-name="Milton" title="Milton — Artis Mixers, Electric Kettles, Smart Tiffins & Cookware" type="button"><i class="fas fa-utensils"></i><span>Milton</span><span class="cat-count" id="count-brand-milton">27</span></button>
-<button class="cat-btn brand-btn" data-brand="adidas" data-brand-name="Adidas" title="Adidas — ClimaLite Polo T-Shirts, Sports Backpacks & Duffle Bags" type="button"><i class="fas fa-running"></i><span>Adidas</span><span class="cat-count" id="count-brand-adidas">26</span></button>
-<button class="cat-btn brand-btn" data-brand="carlton-london" data-brand-name="Carlton London" title="Carlton London — Luxury Perfume, Watch, Wallet & Executive Gift Sets" type="button"><i class="fas fa-spray-can"></i><span>Carlton London</span><span class="cat-count" id="count-brand-carlton-london">19</span></button>
-<button class="cat-btn brand-btn" data-brand="prestige" data-brand-name="Prestige" title="Prestige — Omega Granite Cookware, Pressure Cookers, Kettles & Roti Makers" type="button"><i class="fas fa-fire"></i><span>Prestige</span><span class="cat-count" id="count-brand-prestige">19</span></button>
-<button class="cat-btn brand-btn" data-brand="lenovo" data-brand-name="Lenovo" title="Lenovo — HT True Wireless Earbuds, Neckbands & Bluetooth Speakers" type="button"><i class="fas fa-laptop"></i><span>Lenovo</span><span class="cat-count" id="count-brand-lenovo">12</span></button>
-<button class="cat-btn brand-btn" data-brand="philips" data-brand-name="Philips" title="Philips — ANC Earbuds, 5.1 Sound, Bluetooth Speakers, Steamers & Air Purifiers" type="button"><i class="fas fa-lightbulb"></i><span>Philips</span><span class="cat-count" id="count-brand-philips">12</span></button>
-</div>
-
+<div class="category-filter-bar" id="categoryFilterBar"><button class="cat-btn active" data-cat="all" data-cat-name="All 24 Categories" type="button"><i class="fas fa-th-large"></i><span>All Items</span><span class="cat-count" id="count-all">5,575</span></button><button class="cat-btn" data-brand="portronics" data-brand-name="Portronics" title="Portronics — Chargers, Powerbanks, Bluetooth Speakers & Tech Accessories" type="button"><i class="fas fa-bolt"></i><span>Portronics</span><span class="cat-count" id="count-brand-portronics">435</span></button><button class="cat-btn" data-brand="borosil-larah" data-brand-name="Borosil / Larah" title="Borosil & Larah — Vacuum Insulated Flasks, Cookware, Opalware Dining Sets" type="button"><i class="fas fa-coffee"></i><span>Borosil / Larah</span><span class="cat-count" id="count-brand-borosil-larah">127</span></button><button class="cat-btn" data-brand="wonderchef" data-brand-name="Wonderchef" title="Wonderchef — Nutri-Blend Mixers, Blenders, Coffee Makers & Non-Stick Cookware" type="button"><i class="fas fa-blender"></i><span>Wonderchef</span><span class="cat-count" id="count-brand-wonderchef">123</span></button><button class="cat-btn" data-brand="pebble" data-brand-name="Pebble" title="Pebble — Smartwatches, Wellness Bands, Smart Rings, TWS & Powerbanks" type="button"><i class="fas fa-stopwatch"></i><span>Pebble</span><span class="cat-count" id="count-brand-pebble">66</span></button><button class="cat-btn" data-brand="noise" data-brand-name="Noise" title="Noise — ColorFit Smartwatches, Buds VS TWS & Wireless Headphones" type="button"><i class="fas fa-headphones"></i><span>Noise</span><span class="cat-count" id="count-brand-noise">52</span></button><button class="cat-btn" data-brand="cross" data-brand-name="Cross" title="Cross — Luxury Pens, Slim Wallets & Executive Gift Combos" type="button"><i class="fas fa-pen-nib"></i><span>Cross</span><span class="cat-count" id="count-brand-cross">31</span></button><button class="cat-btn" data-brand="jbl-harman" data-brand-name="JBL / Harman" title="JBL / Harman — Go & Clip Speakers, Wave TWS, Tune Headphones & Soundbars" type="button"><i class="fas fa-volume-up"></i><span>JBL / Harman</span><span class="cat-count" id="count-brand-jbl-harman">31</span></button><button class="cat-btn" data-brand="boat" data-brand-name="boAt" title="boAt — Airdopes TWS, Rockerz Headphones & Stone Bluetooth Speakers" type="button"><i class="fas fa-music"></i><span>boAt</span><span class="cat-count" id="count-brand-boat">30</span></button><button class="cat-btn" data-brand="milton" data-brand-name="Milton" title="Milton — Artis Mixers, Electric Kettles, Smart Tiffins & Cookware" type="button"><i class="fas fa-utensils"></i><span>Milton</span><span class="cat-count" id="count-brand-milton">27</span></button><button class="cat-btn" data-brand="adidas" data-brand-name="Adidas" title="Adidas — ClimaLite Polo T-Shirts, Sports Backpacks & Duffle Bags" type="button"><i class="fas fa-running"></i><span>Adidas</span><span class="cat-count" id="count-brand-adidas">26</span></button><button class="cat-btn" data-brand="carlton-london" data-brand-name="Carlton London" title="Carlton London — Luxury Perfume, Watch, Wallet & Executive Gift Sets" type="button"><i class="fas fa-spray-can"></i><span>Carlton London</span><span class="cat-count" id="count-brand-carlton-london">19</span></button><button class="cat-btn" data-brand="prestige" data-brand-name="Prestige" title="Prestige — Omega Granite Cookware, Pressure Cookers, Kettles & Roti Makers" type="button"><i class="fas fa-fire"></i><span>Prestige</span><span class="cat-count" id="count-brand-prestige">19</span></button><button class="cat-btn" data-brand="lenovo" data-brand-name="Lenovo" title="Lenovo — HT True Wireless Earbuds, Neckbands & Bluetooth Speakers" type="button"><i class="fas fa-laptop"></i><span>Lenovo</span><span class="cat-count" id="count-brand-lenovo">12</span></button><button class="cat-btn" data-brand="philips" data-brand-name="Philips" title="Philips — ANC Earbuds, 5.1 Sound, Bluetooth Speakers, Steamers & Air Purifiers" type="button"><i class="fas fa-lightbulb"></i><span>Philips</span><span class="cat-count" id="count-brand-philips">12</span></button><button class="cat-btn" data-cat="audio-speakers" data-cat-name="Audio &amp; Bluetooth Speakers" title="1. Audio &amp; Bluetooth Speakers — Earbuds, TWS, Neckbands, Portable Bluetooth Speakers, Soundbars" type="button"><i class="fas fa-volume-up"></i><span>Audio &amp; Bluetooth Speakers</span><span class="cat-count" id="count-audio-speakers">204</span></button><button class="cat-btn" data-cat="power-charging" data-cat-name="Power &amp; Charging Gadgets" title="2. Power &amp; Charging Gadgets — Powerbanks, Multi-pin Charging Cables, Wireless Chargers, Adapters" type="button"><i class="fas fa-battery-full"></i><span>Power &amp; Charging Gadgets</span><span class="cat-count" id="count-power-charging">322</span></button><button class="cat-btn" data-cat="smart-tech-accessories" data-cat-name="Smart Tech &amp; Computer Accessories" title="3. Smart Tech &amp; Computer Accessories — Smartwatches, Wireless Mouse, Keyboards, USB Pendrives, Dash Cams" type="button"><i class="fas fa-laptop-code"></i><span>Smart Tech &amp; Computer Accessories</span><span class="cat-count" id="count-smart-tech-accessories">319</span></button><button class="cat-btn" data-cat="bottles-sippers-flasks" data-cat-name="Bottles, Sippers &amp; Flasks" title="4. Bottles, Sippers &amp; Flasks — Stainless Steel Vacuum Flasks, Temperature Bottles, Sports Sippers" type="button"><i class="fas fa-tint"></i><span>Bottles, Sippers &amp; Flasks</span><span class="cat-count" id="count-bottles-sippers-flasks">86</span></button><button class="cat-btn" data-cat="mugs-cups-glassware" data-cat-name="Mugs, Cups &amp; Glassware" title="5. Mugs, Cups &amp; Glassware — Ceramic Coffee Mugs, Travel Tumblers, Borosil Glassware, Tea Sets" type="button"><i class="fas fa-mug-hot"></i><span>Mugs, Cups &amp; Glassware</span><span class="cat-count" id="count-mugs-cups-glassware">187</span></button><button class="cat-btn" data-cat="copperware-traditional" data-cat-name="Copperware &amp; Traditional Metals" title="6. Copperware &amp; Traditional Metals — Hammered Copper Bottles, Tumbler Sets, Brass &amp; Kansa Sets" type="button"><i class="fas fa-burn"></i><span>Copperware &amp; Traditional Metals</span><span class="cat-count" id="count-copperware-traditional">39</span></button><button class="cat-btn" data-cat="home-appliances-cookware" data-cat-name="Home Appliances &amp; Cookware" title="7. Home Appliances &amp; Cookware — Wonderchef Pans, Electric Kettles, Blenders, Toasters, Casseroles" type="button"><i class="fas fa-blender"></i><span>Home Appliances &amp; Cookware</span><span class="cat-count" id="count-home-appliances-cookware">468</span></button><button class="cat-btn" data-cat="dining-lunch-boxes" data-cat-name="Dining Sets &amp; Lunch Boxes" title="8. Dining Sets &amp; Lunch Boxes — Melamine Dinner Sets, Bento Lunch Boxes, Insulated Tiffins, Cutlery" type="button"><i class="fas fa-utensils"></i><span>Dining Sets &amp; Lunch Boxes</span><span class="cat-count" id="count-dining-lunch-boxes">296</span></button><button class="cat-btn" data-cat="barware-cocktail" data-cat-name="Barware &amp; Cocktail Sets" title="9. Barware &amp; Cocktail Sets — Luxury Bar Sets, Cocktail Shakers, Wine Openers, Ice Buckets, Decanters" type="button"><i class="fas fa-wine-glass-alt"></i><span>Barware &amp; Cocktail Sets</span><span class="cat-count" id="count-barware-cocktail">86</span></button><button class="cat-btn" data-cat="pens-luxury-writing" data-cat-name="Pens &amp; Luxury Writing" title="10. Pens &amp; Luxury Writing — Executive Metal Pens, Cross / Parker / Sheaffer / Lamy Pens &amp; Duos" type="button"><i class="fas fa-pen-nib"></i><span>Pens &amp; Luxury Writing</span><span class="cat-count" id="count-pens-luxury-writing">129</span></button><button class="cat-btn" data-cat="diaries-notebooks-planners" data-cat-name="Diaries, Notebooks &amp; Planners" title="11. Diaries, Notebooks &amp; Planners — Hardbound Journals, Undated Planners, Corporate Annual Diaries" type="button"><i class="fas fa-book"></i><span>Diaries, Notebooks &amp; Planners</span><span class="cat-count" id="count-diaries-notebooks-planners">268</span></button><button class="cat-btn" data-cat="desk-organizers-stands" data-cat-name="Desk Organizers &amp; Stands" title="12. Desk Organizers &amp; Stands — Multi-utility Pen Stands, Mobile Stands, Leatherette Desk Mats" type="button"><i class="fas fa-briefcase"></i><span>Desk Organizers &amp; Stands</span><span class="cat-count" id="count-desk-organizers-stands">413</span></button><button class="cat-btn" data-cat="clocks-watches-timepieces" data-cat-name="Clocks, Watches &amp; Timepieces" title="13. Clocks, Watches &amp; Timepieces — Designer Wall Clocks, Minimalist Desk Clocks, Wristwatches" type="button"><i class="fas fa-clock"></i><span>Clocks, Watches &amp; Timepieces</span><span class="cat-count" id="count-clocks-watches-timepieces">105</span></button><button class="cat-btn" data-cat="backpacks-luggage-travel" data-cat-name="Backpacks, Luggage &amp; Travel Bags" title="14. Backpacks, Luggage &amp; Travel Bags — Laptop Backpacks, Duffle Bags, Conference Folder Bags, Trolleys" type="button"><i class="fas fa-suitcase-rolling"></i><span>Backpacks, Luggage &amp; Travel Bags</span><span class="cat-count" id="count-backpacks-luggage-travel">157</span></button><button class="cat-btn" data-cat="wallets-cardholders-pouches" data-cat-name="Wallets, Cardholders &amp; Pouches" title="15. Wallets, Cardholders &amp; Pouches — Leather Wallets, RFID Card Protectors, Passport Wallets, Tech Pouches" type="button"><i class="fas fa-wallet"></i><span>Wallets, Cardholders &amp; Pouches</span><span class="cat-count" id="count-wallets-cardholders-pouches">91</span></button><button class="cat-btn" data-cat="employee-onboarding-kits" data-cat-name="Employee Onboarding Kits" title="16. Employee Onboarding Kits — New Hire Welcome Kits, Induction Gift Boxes, Corporate Employee Sets" type="button"><i class="fas fa-user-check"></i><span>Employee Onboarding Kits</span><span class="cat-count" id="count-employee-onboarding-kits">20</span></button><button class="cat-btn" data-cat="executive-combo-sets" data-cat-name="Executive Combo Gift Sets" title="17. Executive Combo Gift Sets — Curated Pen + Diary + Bottle combos, 3-in-1 / 4-in-1 Executive Sets" type="button"><i class="fas fa-gift"></i><span>Executive Combo Gift Sets</span><span class="cat-count" id="count-executive-combo-sets">401</span></button><button class="cat-btn" data-cat="festive-hampers-gourmet" data-cat-name="Festive Hampers &amp; Gourmet Foods" title="18. Festive Hampers &amp; Gourmet Foods — Diwali Sweets, Dry Fruits, Artisanal Chocolates (Fabelle, Ferrero)" type="button"><i class="fas fa-gifts"></i><span>Festive Hampers &amp; Gourmet Foods</span><span class="cat-count" id="count-festive-hampers-gourmet">455</span></button><button class="cat-btn" data-cat="hamper-packaging-baskets" data-cat-name="Gift Hampers Packaging &amp; Baskets" title="19. Gift Hampers Packaging &amp; Baskets — Hamper Baskets, Decorative Trays, Rigid Gift Boxes, Tin Containers" type="button"><i class="fas fa-box-open"></i><span>Gift Hampers Packaging &amp; Baskets</span><span class="cat-count" id="count-hamper-packaging-baskets">706</span></button><button class="cat-btn" data-cat="divine-idols-pooja" data-cat-name="Divine Idols &amp; Pooja Gifts" title="20. Divine Idols &amp; Pooja Gifts — Gold/Silver Plated Idols, Pooja Boxes, Diyas, Incense Gift Boxes" type="button"><i class="fas fa-om"></i><span>Divine Idols &amp; Pooja Gifts</span><span class="cat-count" id="count-divine-idols-pooja">256</span></button><button class="cat-btn" data-cat="silver-brass-artifacts" data-cat-name="Silver, Brass &amp; Metallic Artifacts" title="21. Silver, Brass &amp; Metallic Artifacts — German Silver Bowls, Silver Coins, Plated Mementos, Traditional Art" type="button"><i class="fas fa-coins"></i><span>Silver, Brass &amp; Metallic Artifacts</span><span class="cat-count" id="count-silver-brass-artifacts">323</span></button><button class="cat-btn" data-cat="trophies-awards-medals" data-cat-name="Trophies, Awards &amp; Medals" title="22. Trophies, Awards &amp; Medals — Corporate Awards, Crystal Trophies, Sports &amp; Appreciation Medals" type="button"><i class="fas fa-trophy"></i><span>Trophies, Awards &amp; Medals</span><span class="cat-count" id="count-trophies-awards-medals">176</span></button><button class="cat-btn" data-cat="corporate-apparel-wearables" data-cat-name="Corporate Apparel &amp; Wearables" title="23. Corporate Apparel &amp; Wearables — Custom Embroidered Polo T-Shirts, Jackets, Caps, Windcheaters" type="button"><i class="fas fa-tshirt"></i><span>Corporate Apparel &amp; Wearables</span><span class="cat-count" id="count-corporate-apparel-wearables">92</span></button><button class="cat-btn" data-cat="healthcare-medical" data-cat-name="Healthcare &amp; Medical Communication" title="24. Healthcare &amp; Medical Communication — Clinical Organ Models, Pharma Displays, Doctor Kits, Medical Clipboards" type="button"><i class="fas fa-notes-medical"></i><span>Healthcare &amp; Medical Communication</span><span class="cat-count" id="count-healthcare-medical">22</span></button></div>
 <!-- Status & Count Bar -->
 <div class="gallery-status-bar">
 <div id="productCount">Showing <strong>506</strong> items in <strong>All Catalogue Items</strong></div>
@@ -4595,7 +4508,7 @@ if (backToTopButton) {
     });
 }
 
-// ═══ 24-Category & 14-Brand Virtual Grid, SKU & Price Display Engine ═══
+// ═══ Unified Category & Brand Virtual Grid, SKU & Price Display Engine ═══
 (function() {
     "use strict";
 
@@ -4774,12 +4687,13 @@ if (backToTopButton) {
         var brandSlug = (window._activeBrand || "all");
 
         var filterLabel = "All Catalogue Items";
-        if (brandSlug !== "all") {
-            var activeBrandBtn = document.querySelector(".brand-btn.active");
-            filterLabel = (activeBrandBtn ? activeBrandBtn.getAttribute("data-brand-name") : brandSlug) + " Collection";
-        } else if (catSlug !== "all") {
-            var activeCatBtn = document.querySelector(".cat-btn.active:not(.brand-btn)");
-            filterLabel = activeCatBtn ? (activeCatBtn.getAttribute("data-cat-name") || "All 24 Categories") : "All 24 Categories";
+        var activeBtn = document.querySelector("#categoryFilterBar .cat-btn.active");
+        if (activeBtn) {
+            if (activeBtn.hasAttribute("data-brand")) {
+                filterLabel = (activeBtn.getAttribute("data-brand-name") || brandSlug) + " Brand Collection";
+            } else if (activeBtn.getAttribute("data-cat") !== "all") {
+                filterLabel = activeBtn.getAttribute("data-cat-name") || "Selected Category";
+            }
         }
 
         var query = ((document.getElementById("productSearch") || {}).value || "").trim();
@@ -4895,7 +4809,7 @@ if (backToTopButton) {
             catCounts[p._slug] = (catCounts[p._slug] || 0) + 1;
         });
 
-        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
+        document.querySelectorAll("#categoryFilterBar .cat-btn[data-cat]").forEach(function(btn) {
             var slug = btn.getAttribute("data-cat");
             var countEl = btn.querySelector(".cat-count");
             if (!countEl) return;
@@ -4909,24 +4823,18 @@ if (backToTopButton) {
 
         // Dynamic brand counts across 14 brands
         var brandCounts = {};
-        var totalBranded = 0;
         allProducts.forEach(function(p) {
             if (p._brandSlug && p._brandSlug !== "inhouse") {
                 brandCounts[p._brandSlug] = (brandCounts[p._brandSlug] || 0) + 1;
-                totalBranded++;
             }
         });
 
-        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
+        document.querySelectorAll("#categoryFilterBar .cat-btn[data-brand]").forEach(function(btn) {
             var slug = btn.getAttribute("data-brand");
             var countEl = btn.querySelector(".cat-count");
             if (!countEl) return;
-            if (slug === "all") {
-                countEl.textContent = totalBranded.toLocaleString();
-            } else {
-                var n = brandCounts[slug] || 0;
-                countEl.textContent = n.toLocaleString();
-            }
+            var n = brandCounts[slug] || 0;
+            countEl.textContent = n.toLocaleString();
         });
 
         var search = document.getElementById("productSearch");
@@ -4934,31 +4842,21 @@ if (backToTopButton) {
             search.placeholder = "Search " + allProducts.length.toLocaleString() + " items by Product Name, Brand (e.g. Portronics, JBL, Borosil), Category, or SKU...";
         }
 
-        // Category pills click
-        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
+        // Unified Category & Brand Pills Click Handler
+        document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(btn) {
             btn.addEventListener("click", function() {
-                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
+                document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(b) {
+                    b.classList.remove("active");
+                });
                 btn.classList.add("active");
-                window._activeCat = btn.getAttribute("data-cat");
-                window._activeBrand = "all";
-                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-                var allBrandBtn = document.querySelector(".brand-btn[data-brand='all']");
-                if (allBrandBtn) allBrandBtn.classList.add("active");
-                applyFilters();
-            });
-        });
 
-        // Brand pills click
-        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-                btn.classList.add("active");
-                var bSlug = btn.getAttribute("data-brand");
-                window._activeBrand = bSlug;
-                window._activeCat = "all";
-                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
-                var allCatBtn = document.querySelector(".cat-btn[data-cat='all']:not(.brand-btn)");
-                if (allCatBtn) allCatBtn.classList.add("active");
+                if (btn.hasAttribute("data-brand")) {
+                    window._activeBrand = btn.getAttribute("data-brand");
+                    window._activeCat = "all";
+                } else {
+                    window._activeCat = btn.getAttribute("data-cat") || "all";
+                    window._activeBrand = "all";
+                }
                 applyFilters();
             });
         });
@@ -4993,33 +4891,12 @@ if (backToTopButton) {
         applyFilters();
     }
 
-    window.switchFilterMode = function(mode) {
-        var catBar = document.getElementById("categoryFilterBar");
-        var brandBar = document.getElementById("brandFilterBar");
-        var btnCat = document.getElementById("btnModeCategories");
-        var btnBrand = document.getElementById("btnModeBrands");
-
-        if (mode === "brands") {
-            if (catBar) catBar.style.display = "none";
-            if (brandBar) brandBar.style.display = "flex";
-            if (btnCat) btnCat.classList.remove("active");
-            if (btnBrand) btnBrand.classList.add("active");
-        } else {
-            if (catBar) catBar.style.display = "flex";
-            if (brandBar) brandBar.style.display = "none";
-            if (btnCat) btnCat.classList.add("active");
-            if (btnBrand) btnBrand.classList.remove("active");
-        }
-    };
-
     window.resetAllFilters = function() {
-        document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
-        var allCatBtn = document.querySelector(".cat-btn[data-cat=\"all\"]:not(.brand-btn)");
+        document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(b) {
+            b.classList.remove("active");
+        });
+        var allCatBtn = document.querySelector("#categoryFilterBar .cat-btn[data-cat=\"all\"]");
         if (allCatBtn) allCatBtn.classList.add("active");
-
-        document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-        var allBrandBtn = document.querySelector(".brand-btn[data-brand=\"all\"]");
-        if (allBrandBtn) allBrandBtn.classList.add("active");
 
         var s = document.getElementById("productSearch");
         if (s) s.value = "";

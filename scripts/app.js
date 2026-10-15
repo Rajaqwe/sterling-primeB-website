@@ -93,7 +93,7 @@ if (backToTopButton) {
     });
 }
 
-// ═══ 24-Category & 14-Brand Virtual Grid, SKU & Price Display Engine ═══
+// ═══ Unified Category & Brand Virtual Grid, SKU & Price Display Engine ═══
 (function() {
     "use strict";
 
@@ -272,12 +272,13 @@ if (backToTopButton) {
         var brandSlug = (window._activeBrand || "all");
 
         var filterLabel = "All Catalogue Items";
-        if (brandSlug !== "all") {
-            var activeBrandBtn = document.querySelector(".brand-btn.active");
-            filterLabel = (activeBrandBtn ? activeBrandBtn.getAttribute("data-brand-name") : brandSlug) + " Collection";
-        } else if (catSlug !== "all") {
-            var activeCatBtn = document.querySelector(".cat-btn.active:not(.brand-btn)");
-            filterLabel = activeCatBtn ? (activeCatBtn.getAttribute("data-cat-name") || "All 24 Categories") : "All 24 Categories";
+        var activeBtn = document.querySelector("#categoryFilterBar .cat-btn.active");
+        if (activeBtn) {
+            if (activeBtn.hasAttribute("data-brand")) {
+                filterLabel = (activeBtn.getAttribute("data-brand-name") || brandSlug) + " Brand Collection";
+            } else if (activeBtn.getAttribute("data-cat") !== "all") {
+                filterLabel = activeBtn.getAttribute("data-cat-name") || "Selected Category";
+            }
         }
 
         var query = ((document.getElementById("productSearch") || {}).value || "").trim();
@@ -393,7 +394,7 @@ if (backToTopButton) {
             catCounts[p._slug] = (catCounts[p._slug] || 0) + 1;
         });
 
-        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
+        document.querySelectorAll("#categoryFilterBar .cat-btn[data-cat]").forEach(function(btn) {
             var slug = btn.getAttribute("data-cat");
             var countEl = btn.querySelector(".cat-count");
             if (!countEl) return;
@@ -407,24 +408,18 @@ if (backToTopButton) {
 
         // Dynamic brand counts across 14 brands
         var brandCounts = {};
-        var totalBranded = 0;
         allProducts.forEach(function(p) {
             if (p._brandSlug && p._brandSlug !== "inhouse") {
                 brandCounts[p._brandSlug] = (brandCounts[p._brandSlug] || 0) + 1;
-                totalBranded++;
             }
         });
 
-        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
+        document.querySelectorAll("#categoryFilterBar .cat-btn[data-brand]").forEach(function(btn) {
             var slug = btn.getAttribute("data-brand");
             var countEl = btn.querySelector(".cat-count");
             if (!countEl) return;
-            if (slug === "all") {
-                countEl.textContent = totalBranded.toLocaleString();
-            } else {
-                var n = brandCounts[slug] || 0;
-                countEl.textContent = n.toLocaleString();
-            }
+            var n = brandCounts[slug] || 0;
+            countEl.textContent = n.toLocaleString();
         });
 
         var search = document.getElementById("productSearch");
@@ -432,31 +427,21 @@ if (backToTopButton) {
             search.placeholder = "Search " + allProducts.length.toLocaleString() + " items by Product Name, Brand (e.g. Portronics, JBL, Borosil), Category, or SKU...";
         }
 
-        // Category pills click
-        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
+        // Unified Category & Brand Pills Click Handler
+        document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(btn) {
             btn.addEventListener("click", function() {
-                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
+                document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(b) {
+                    b.classList.remove("active");
+                });
                 btn.classList.add("active");
-                window._activeCat = btn.getAttribute("data-cat");
-                window._activeBrand = "all";
-                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-                var allBrandBtn = document.querySelector(".brand-btn[data-brand='all']");
-                if (allBrandBtn) allBrandBtn.classList.add("active");
-                applyFilters();
-            });
-        });
 
-        // Brand pills click
-        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-                btn.classList.add("active");
-                var bSlug = btn.getAttribute("data-brand");
-                window._activeBrand = bSlug;
-                window._activeCat = "all";
-                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
-                var allCatBtn = document.querySelector(".cat-btn[data-cat='all']:not(.brand-btn)");
-                if (allCatBtn) allCatBtn.classList.add("active");
+                if (btn.hasAttribute("data-brand")) {
+                    window._activeBrand = btn.getAttribute("data-brand");
+                    window._activeCat = "all";
+                } else {
+                    window._activeCat = btn.getAttribute("data-cat") || "all";
+                    window._activeBrand = "all";
+                }
                 applyFilters();
             });
         });
@@ -491,33 +476,12 @@ if (backToTopButton) {
         applyFilters();
     }
 
-    window.switchFilterMode = function(mode) {
-        var catBar = document.getElementById("categoryFilterBar");
-        var brandBar = document.getElementById("brandFilterBar");
-        var btnCat = document.getElementById("btnModeCategories");
-        var btnBrand = document.getElementById("btnModeBrands");
-
-        if (mode === "brands") {
-            if (catBar) catBar.style.display = "none";
-            if (brandBar) brandBar.style.display = "flex";
-            if (btnCat) btnCat.classList.remove("active");
-            if (btnBrand) btnBrand.classList.add("active");
-        } else {
-            if (catBar) catBar.style.display = "flex";
-            if (brandBar) brandBar.style.display = "none";
-            if (btnCat) btnCat.classList.add("active");
-            if (btnBrand) btnBrand.classList.remove("active");
-        }
-    };
-
     window.resetAllFilters = function() {
-        document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
-        var allCatBtn = document.querySelector(".cat-btn[data-cat=\"all\"]:not(.brand-btn)");
+        document.querySelectorAll("#categoryFilterBar .cat-btn").forEach(function(b) {
+            b.classList.remove("active");
+        });
+        var allCatBtn = document.querySelector("#categoryFilterBar .cat-btn[data-cat=\"all\"]");
         if (allCatBtn) allCatBtn.classList.add("active");
-
-        document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
-        var allBrandBtn = document.querySelector(".brand-btn[data-brand=\"all\"]");
-        if (allBrandBtn) allBrandBtn.classList.add("active");
 
         var s = document.getElementById("productSearch");
         if (s) s.value = "";

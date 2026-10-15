@@ -403,16 +403,6 @@ if (backToTopButton) {
             });
         });
 
-        // View mode buttons click
-        document.querySelectorAll(".view-mode-btn[data-type-filter]").forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                document.querySelectorAll(".view-mode-btn").forEach(function(b) { b.classList.remove("active"); });
-                btn.classList.add("active");
-                window._activeType = btn.getAttribute("data-type-filter");
-                applyFilters();
-            });
-        });
-
         // Search input
         if (search) {
             search.addEventListener("input", function() {
@@ -446,10 +436,6 @@ if (backToTopButton) {
         document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
         var allBtn = document.querySelector(".cat-btn[data-cat=\"all\"]");
         if (allBtn) allBtn.classList.add("active");
-
-        document.querySelectorAll(".view-mode-btn").forEach(function(b) { b.classList.remove("active"); });
-        var allType = document.querySelector(".view-mode-btn[data-type-filter=\"all\"]");
-        if (allType) allType.classList.add("active");
 
         var s = document.getElementById("productSearch");
         if (s) s.value = "";

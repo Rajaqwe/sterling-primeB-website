@@ -21,7 +21,7 @@ if (typeof AOS !== "undefined") {
     });
 }
 
-// Lightbox Modal Controls
+// Lightbox Modal Controls (with SKU & Listed Price support)
 function openLightbox(src, title, catName, brand, isPhoto) {
     var lightbox = document.getElementById("lightbox");
     var lightboxImg = document.getElementById("lightbox-img");
@@ -40,11 +40,11 @@ function openLightbox(src, title, catName, brand, isPhoto) {
     if (lightboxCat) lightboxCat.textContent = catName || "Corporate Gift";
     if (lightboxBrand) lightboxBrand.textContent = brand || "Sterling Prime";
 
-    var waMsg = encodeURIComponent("Hi Sterling Prime, I am interested in '" + title + "' (Brand: " + (brand || "Sterling Prime") + ", Category: " + (catName || "Corporate Gift") + "). Please share pricing, customization branding and catalogue PDF.");
+    var waMsg = encodeURIComponent("Hi Sterling Prime, I would like to order / get a quote for '" + title + "' (" + (brand || "Sterling Prime") + " | Category: " + (catName || "Corporate Gift") + "). Please share bulk pricing and customization details.");
     if (lightboxWaBtn) lightboxWaBtn.href = "https://wa.me/917041614713?text=" + waMsg;
 
-    var emailSub = encodeURIComponent("Enquiry for " + title + " - Sterling Prime");
-    var emailBody = encodeURIComponent("Hi Sterling Prime Team,\n\nI am interested in '" + title + "' (Brand: " + (brand || "Sterling Prime") + ", Category: " + (catName || "Corporate Gift") + ").\n\nPlease share the pricing, MOQ, customization details and catalogue PDF.\n\nThank you!");
+    var emailSub = encodeURIComponent("Order / Quote Enquiry for " + title + " - Sterling Prime");
+    var emailBody = encodeURIComponent("Hi Sterling Prime Team,\n\nI would like to place an order / enquiry for:\n- Item: " + title + "\n- Brand / SKU Info: " + (brand || "Sterling Prime") + "\n- Category: " + (catName || "Corporate Gift") + "\n- Required Quantity: \n\nPlease share the pricing, MOQ, customization details and catalogue PDF.\n\nThank you!");
     if (lightboxEmailBtn) lightboxEmailBtn.href = "mailto:info@mysterling.in?subject=" + emailSub + "&body=" + emailBody;
 
     lightbox.style.display = "flex";
@@ -93,7 +93,7 @@ if (backToTopButton) {
     });
 }
 
-// ═══ Virtual Grid Engine ═══
+// ═══ 24-Category Virtual Grid, SKU & Price Display Engine ═══
 (function() {
     "use strict";
 
@@ -116,80 +116,85 @@ if (backToTopButton) {
     }
 
     function collectInhouse() {
-        var INHOUSE_MAP = {
-            "wooden-gifts": "wooden-handicrafts",
-            "healthcare-medical": "wellness-grooming",
-            "wellness-care": "wellness-grooming",
-            "gift-sets": "corporate-gift-sets",
-            "promotional-merch": "corporate-gift-sets",
-            "packaging-storage": "corporate-gift-sets",
-            "acrylic-displays": "office-desk",
-            "drinkware-kitchen": "drinkware-bottles"
-        };
         var cards = document.querySelectorAll("#galleryGrid .product-card.is-inhouse");
         var result = [];
-        cards.forEach(function(c) {
-            var rawSlug = (c.getAttribute("data-category") || "").toLowerCase();
-            var slug = INHOUSE_MAP[rawSlug] || rawSlug;
-            var item = {
+        cards.forEach(function(c, idx) {
+            var slug = (c.getAttribute("data-category") || "desk-organizers-stands").toLowerCase();
+            var sku = c.getAttribute("data-sku") || ("SP-IH-" + String(idx + 1).padStart(3, "0"));
+            var catName = c.getAttribute("data-category-name") || "";
+            result.push({
                 _domNode: c,
                 _slug: slug,
                 _name: (c.getAttribute("data-name") || "").toLowerCase(),
-                _brand: (c.getAttribute("data-brand") || "").toLowerCase(),
-                _type: "inhouse",
-                _imageFailed: false
-            };
-            var productImage = c.querySelector(".img-wrapper img");
-            if (!productImage) {
-                item._imageFailed = true;
-                if (c.parentNode) c.parentNode.removeChild(c);
-            } else {
-                productImage.addEventListener("error", function () {
-                    item._imageFailed = true;
-                    if (c.parentNode) c.parentNode.removeChild(c);
-                    applyFilters();
-                }, { once: true });
-            }
-            result.push(item);
+                _brand: (c.getAttribute("data-brand") || "sterling prime").toLowerCase(),
+                _sku: sku.toLowerCase(),
+                _catName: catName.toLowerCase(),
+                _type: "inhouse"
+            });
         });
         return result;
     }
 
     function buildCard(p) {
-        var slug = p.category_slug || p.category || "corporate-gift-sets";
+        var slug = p.category_slug || p.category || "desk-organizers-stands";
         var name = p.name || p.title || "Corporate Gift Item";
         var brand = p.brand || "Partner Brand";
+        var sku = p.sku || p.model || p.id || "";
+        var price = p.price || "";
         var img = p.image || p.image_path || "";
         var catName = p.category_name || p.category || "Corporate Gift";
-        var waText = encodeURIComponent("Hi Sterling Prime, I would like a quotation for:\n\n*" + brand + " - " + name + "*\nCategory: " + catName);
+
+        var priceSuffix = price ? (" | Listed Price: " + price) : "";
+        var waText = encodeURIComponent(
+            "Hi Sterling Prime, I would like to order / get a quotation for:\n\n*" +
+            brand + " - " + name + "*\nSKU: " + sku + "\nCategory: " + catName +
+            (price ? "\nListed Price: " + price : "")
+        );
         var waUrl = "https://wa.me/917041614713?text=" + waText;
-        if (!img) {
-            p._imageFailed = true;
-            return null;
-        }
-        var imgSrc = img;
+        var imgSrc = img ? img : "raw%20images/placeholder.jpg";
+
+        var lbTitle = name + (sku ? " [SKU: " + sku + "]" : "") + (price ? " — " + price : "");
+        var lbBrand = brand + (sku ? " | SKU: " + sku : "") + priceSuffix;
 
         var card = document.createElement("div");
         card.className = "product-card is-partner";
         card.setAttribute("data-category", slug);
         card.setAttribute("data-category-name", catName);
-        card.setAttribute("data-name", name);
-        card.setAttribute("data-brand", brand);
+        card.setAttribute("data-name", lbTitle);
+        card.setAttribute("data-brand", lbBrand);
+        card.setAttribute("data-sku", sku);
+        if (price) card.setAttribute("data-price", price);
         card.setAttribute("data-type", "partner_product");
-        card.setAttribute("data-product-id", p.id || "");
         card.setAttribute("data-img", imgSrc);
         card.setAttribute("onclick", "openLightbox(this.getAttribute('data-img'), this.getAttribute('data-name'), this.getAttribute('data-category-name'), this.getAttribute('data-brand'), true);");
 
+        var priceBadgeHtml = price
+            ? "<span class=\"product-price-tag\" style=\"position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,0.92);color:#fbbf24;border:1px solid rgba(251,191,36,0.55);padding:3px 9px;border-radius:6px;font-weight:700;font-size:0.78rem;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,0.3);\">" + escapeHtml(price) + "</span>"
+            : "";
+
+        var skuPillHtml = sku
+            ? "<span class=\"sku-badge\" style=\"background:rgba(212,175,55,0.16);color:#b8860b;border:1px solid rgba(212,175,55,0.45);padding:1px 7px;border-radius:4px;font-weight:700;font-family:monospace;font-size:0.74rem;letter-spacing:0.03em;\">SKU: " + escapeHtml(sku) + "</span>"
+            : "";
+
+        var inlinePriceHtml = price
+            ? "<div class=\"product-price-inline\" style=\"font-size:0.8rem;font-weight:700;color:#0f766e;margin-top:2px;\">Listed Price: " + escapeHtml(price) + "</div>"
+            : "";
+
         card.innerHTML =
             "<span class=\"product-badge\">" + escapeHtml(catName) + "</span>" +
-            "<div class=\"img-wrapper\">" +
-                "<img src=\"" + escapeHtml(imgSrc) + "\" alt=\"" + escapeHtml(name) + "\" loading=\"lazy\">" +
+            "<div class=\"img-wrapper\" style=\"position:relative;\">" +
+                "<img src=\"" + escapeHtml(imgSrc) + "\" alt=\"" + escapeHtml(name + " - SKU " + sku) + "\" loading=\"lazy\">" +
+                priceBadgeHtml +
             "</div>" +
             "<div class=\"product-info\">" +
-                "<div class=\"brand-subtitle\">" + escapeHtml(brand) + "</div>" +
-                "<div class=\"product-name\" title=\"" + escapeHtml(name) + "\">" + escapeHtml(name) + "</div>" +
+                "<div class=\"brand-subtitle\" style=\"display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:4px;\">" +
+                    "<span>" + escapeHtml(brand) + "</span>" +
+                    skuPillHtml +
+                "</div>" +
+                "<div class=\"product-name\" title=\"" + escapeHtml(name + " (SKU: " + sku + ")") + "\">" + escapeHtml(name) + "</div>" +
+                inlinePriceHtml +
                 "<div class=\"card-actions\">" +
-                    "<a href=\"" + waUrl + "\" target=\"_blank\" class=\"btn-enquire\" title=\"Enquire via WhatsApp\" onclick=\"event.stopPropagation();\">" +
+                    "<a href=\"" + waUrl + "\" target=\"_blank\" class=\"btn-enquire\" title=\"Order / Enquire SKU " + escapeHtml(sku) + " via WhatsApp\" onclick=\"event.stopPropagation();\">" +
                         "<i class=\"fab fa-whatsapp\"></i> Enquire" +
                     "</a>" +
                     "<button type=\"button\" class=\"btn-zoom\" title=\"View details\" onclick=\"openLightbox(this.closest('.product-card').getAttribute('data-img'), this.closest('.product-card').getAttribute('data-name'), this.closest('.product-card').getAttribute('data-category-name'), this.closest('.product-card').getAttribute('data-brand'), true); event.stopPropagation();\">" +
@@ -197,13 +202,6 @@ if (backToTopButton) {
                     "</button>" +
                 "</div>" +
             "</div>";
-        var partnerImage = card.querySelector(".img-wrapper img");
-        if (partnerImage) {
-            partnerImage.addEventListener("error", function () {
-                p._imageFailed = true;
-                applyFilters();
-            }, { once: true });
-        }
         return card;
     }
 
@@ -221,8 +219,7 @@ if (backToTopButton) {
         for (var i = rendered; i < end; i++) {
             var item = filtered[i];
             if (!item._domNode) {
-                var card = buildCard(item);
-                if (card) fragment.appendChild(card);
+                fragment.appendChild(buildCard(item));
             }
         }
         rendered = end;
@@ -259,32 +256,17 @@ if (backToTopButton) {
         observer.observe(sentinel);
     }
 
-    function updateViewModeCounts() {
-        var validProducts = allProducts.filter(function (p) { return !p._imageFailed; });
-        var counts = {
-            all: validProducts.length,
-            inhouse: validProducts.filter(function (p) { return !!p._domNode; }).length,
-            partner_catalogue: validProducts.filter(function (p) { return !p._domNode; }).length
-        };
-        document.querySelectorAll(".view-mode-btn[data-type-filter]").forEach(function (btn) {
-            var countEl = btn.querySelector("[data-view-count]");
-            if (!countEl) return;
-            var key = btn.getAttribute("data-type-filter");
-            countEl.textContent = (counts[key] || 0).toLocaleString();
-        });
-    }
-
     function updateStatusText() {
         var countEl = document.getElementById("productCount");
         if (!countEl) return;
 
         var visibleInhouse = allProducts.filter(function(p) {
-            return p._domNode && !p._imageFailed && p._domNode.style.display !== "none";
+            return p._domNode && p._domNode.style.display !== "none";
         }).length;
         var totalMatches = visibleInhouse + filtered.length;
 
         var activeBtn = document.querySelector(".cat-btn.active");
-        var catLabel = activeBtn ? (activeBtn.getAttribute("data-cat-name") || "All Catalogue Items") : "All Catalogue Items";
+        var catLabel = activeBtn ? (activeBtn.getAttribute("data-cat-name") || "All 24 Categories") : "All 24 Categories";
 
         var query = ((document.getElementById("productSearch") || {}).value || "").trim();
         var msg = "Showing <strong>" + (visibleInhouse + rendered) + " of " + totalMatches + "</strong> items in <strong>" + catLabel + "</strong>";
@@ -299,28 +281,36 @@ if (backToTopButton) {
         var typeF = (window._activeType || "all");
         var query = ((document.getElementById("productSearch") || {}).value || "").toLowerCase().trim();
 
-        // 1. Toggle static in-house cards
+        // 1. Toggle static in-house cards (searchable by Product Name, SKU, Brand, or Category)
         allProducts.forEach(function(p) {
             if (p._domNode) {
-                var show = !p._imageFailed;
+                var show = true;
                 if (catSlug !== "all" && p._slug !== catSlug) show = false;
                 if (typeF === "partner_product" || typeF === "partner_catalogue") show = false;
                 if (query) {
-                    var haystack = p._name + " " + p._brand + " " + p._slug;
+                    var haystack = p._name + " " + p._sku + " " + p._brand + " " + p._catName + " " + p._slug;
                     if (haystack.indexOf(query) === -1) show = false;
                 }
                 p._domNode.style.display = show ? "flex" : "none";
             }
         });
 
-        // 2. Filter partner catalog items
+        // 2. Filter partner catalog items (searchable by Product Name, SKU/Model, Brand, Category, Price, or Description)
         filtered = allProducts.filter(function(p) {
             if (p._domNode) return false;
-            if (p._imageFailed || !(p.image || p.image_path)) return false;
             if (catSlug !== "all" && p._slug !== catSlug) return false;
             if (typeF === "inhouse") return false;
             if (query) {
-                var haystack = ((p.name || "") + " " + (p.brand || "") + " " + (p.category || "") + " " + (p.category_slug || "") + " " + (p.description || "")).toLowerCase();
+                var haystack = (
+                    (p.name || "") + " " +
+                    (p.sku || "") + " " +
+                    (p.model || "") + " " +
+                    (p.brand || "") + " " +
+                    (p.price || "") + " " +
+                    (p.category_name || "") + " " +
+                    (p.category_slug || "") + " " +
+                    (p.description || "")
+                ).toLowerCase();
                 if (haystack.indexOf(query) === -1) return false;
             }
             return true;
@@ -352,7 +342,6 @@ if (backToTopButton) {
         }
 
         updateStatusText();
-        updateViewModeCounts();
 
         var resetBtn = document.getElementById("resetFilterBtn");
         if (resetBtn) {
@@ -368,20 +357,20 @@ if (backToTopButton) {
         var inhouse = collectInhouse();
 
         var partnerAll = (window.CATALOG_DATA || []).filter(function(p) {
-            return p.type === "partner_product";
+            return !p.inhouse && !(typeof p.id === "string" && p.id.indexOf("inhouse_") === 0);
         }).map(function(p) {
             return Object.assign({}, p, {
-                _slug: p.category_slug || p.category || "corporate-gift-sets",
+                _slug: p.category_slug || p.category || "desk-organizers-stands",
                 _name: (p.name || p.title || "").toLowerCase(),
                 _brand: (p.brand || "").toLowerCase(),
+                _sku: (p.sku || p.model || "").toLowerCase(),
                 _type: "partner_product"
             });
         });
 
         allProducts = inhouse.concat(partnerAll);
-        updateViewModeCounts();
 
-        // Calculate dynamic pill counts
+        // Calculate dynamic pill counts across all 24 categories
         var catCounts = {};
         allProducts.forEach(function(p) {
             catCounts[p._slug] = (catCounts[p._slug] || 0) + 1;
@@ -401,7 +390,7 @@ if (backToTopButton) {
 
         var search = document.getElementById("productSearch");
         if (search) {
-            search.placeholder = "Search " + allProducts.length.toLocaleString() + "+ items by brand, category, or keyword...";
+            search.placeholder = "Search " + allProducts.length.toLocaleString() + " items by Product Name, SKU (e.g. POR-3404, LBS-201, SP-IH-001), Brand, or Category...";
         }
 
         // Category pills click

@@ -93,7 +93,7 @@ if (backToTopButton) {
     });
 }
 
-// ═══ 24-Category Virtual Grid, SKU & Price Display Engine ═══
+// ═══ 24-Category & 14-Brand Virtual Grid, SKU & Price Display Engine ═══
 (function() {
     "use strict";
 
@@ -125,8 +125,9 @@ if (backToTopButton) {
             result.push({
                 _domNode: c,
                 _slug: slug,
+                _brandSlug: "inhouse",
                 _name: (c.getAttribute("data-name") || "").toLowerCase(),
-                _brand: (c.getAttribute("data-brand") || "sterling prime").toLowerCase(),
+                _brand: (c.getAttribute("data-brand") || "sterling prime in-house").toLowerCase(),
                 _sku: sku.toLowerCase(),
                 _catName: catName.toLowerCase(),
                 _type: "inhouse"
@@ -139,6 +140,7 @@ if (backToTopButton) {
         var slug = p.category_slug || p.category || "desk-organizers-stands";
         var name = p.name || p.title || "Corporate Gift Item";
         var brand = p.brand || "Partner Brand";
+        var brandSlug = p.brand_slug || "";
         var sku = p.sku || p.model || p.id || "";
         var price = p.price || "";
         var img = p.image || p.image_path || "";
@@ -160,6 +162,7 @@ if (backToTopButton) {
         card.className = "product-card is-partner";
         card.setAttribute("data-category", slug);
         card.setAttribute("data-category-name", catName);
+        card.setAttribute("data-brand-slug", brandSlug);
         card.setAttribute("data-name", lbTitle);
         card.setAttribute("data-brand", lbBrand);
         card.setAttribute("data-sku", sku);
@@ -265,11 +268,20 @@ if (backToTopButton) {
         }).length;
         var totalMatches = visibleInhouse + filtered.length;
 
-        var activeBtn = document.querySelector(".cat-btn.active");
-        var catLabel = activeBtn ? (activeBtn.getAttribute("data-cat-name") || "All 24 Categories") : "All 24 Categories";
+        var catSlug = (window._activeCat || "all");
+        var brandSlug = (window._activeBrand || "all");
+
+        var filterLabel = "All Catalogue Items";
+        if (brandSlug !== "all") {
+            var activeBrandBtn = document.querySelector(".brand-btn.active");
+            filterLabel = (activeBrandBtn ? activeBrandBtn.getAttribute("data-brand-name") : brandSlug) + " Collection";
+        } else if (catSlug !== "all") {
+            var activeCatBtn = document.querySelector(".cat-btn.active:not(.brand-btn)");
+            filterLabel = activeCatBtn ? (activeCatBtn.getAttribute("data-cat-name") || "All 24 Categories") : "All 24 Categories";
+        }
 
         var query = ((document.getElementById("productSearch") || {}).value || "").trim();
-        var msg = "Showing <strong>" + (visibleInhouse + rendered) + " of " + totalMatches + "</strong> items in <strong>" + catLabel + "</strong>";
+        var msg = "Showing <strong>" + (visibleInhouse + rendered) + " of " + totalMatches + "</strong> items in <strong>" + escapeHtml(filterLabel) + "</strong>";
         if (query) {
             msg += " matching \"<strong>" + escapeHtml(query) + "</strong>\"";
         }
@@ -278,14 +290,16 @@ if (backToTopButton) {
 
     function applyFilters() {
         var catSlug = (window._activeCat || "all");
+        var brandSlug = (window._activeBrand || "all");
         var typeF = (window._activeType || "all");
         var query = ((document.getElementById("productSearch") || {}).value || "").toLowerCase().trim();
 
-        // 1. Toggle static in-house cards (searchable by Product Name, SKU, Brand, or Category)
+        // 1. Toggle static in-house cards
         allProducts.forEach(function(p) {
             if (p._domNode) {
                 var show = true;
                 if (catSlug !== "all" && p._slug !== catSlug) show = false;
+                if (brandSlug !== "all") show = false;
                 if (typeF === "partner_product" || typeF === "partner_catalogue") show = false;
                 if (query) {
                     var haystack = p._name + " " + p._sku + " " + p._brand + " " + p._catName + " " + p._slug;
@@ -295,10 +309,11 @@ if (backToTopButton) {
             }
         });
 
-        // 2. Filter partner catalog items (searchable by Product Name, SKU/Model, Brand, Category, Price, or Description)
+        // 2. Filter partner catalog items
         filtered = allProducts.filter(function(p) {
             if (p._domNode) return false;
             if (catSlug !== "all" && p._slug !== catSlug) return false;
+            if (brandSlug !== "all" && p._brandSlug !== brandSlug) return false;
             if (typeF === "inhouse") return false;
             if (query) {
                 var haystack = (
@@ -306,6 +321,7 @@ if (backToTopButton) {
                     (p.sku || "") + " " +
                     (p.model || "") + " " +
                     (p.brand || "") + " " +
+                    (p.brand_slug || "") + " " +
                     (p.price || "") + " " +
                     (p.category_name || "") + " " +
                     (p.category_slug || "") + " " +
@@ -345,7 +361,7 @@ if (backToTopButton) {
 
         var resetBtn = document.getElementById("resetFilterBtn");
         if (resetBtn) {
-            if (catSlug !== "all" || typeF !== "all" || query) {
+            if (catSlug !== "all" || brandSlug !== "all" || typeF !== "all" || query) {
                 resetBtn.style.display = "inline-block";
             } else {
                 resetBtn.style.display = "none";
@@ -361,6 +377,7 @@ if (backToTopButton) {
         }).map(function(p) {
             return Object.assign({}, p, {
                 _slug: p.category_slug || p.category || "desk-organizers-stands",
+                _brandSlug: (p.brand_slug || "").toLowerCase(),
                 _name: (p.name || p.title || "").toLowerCase(),
                 _brand: (p.brand || "").toLowerCase(),
                 _sku: (p.sku || p.model || "").toLowerCase(),
@@ -370,13 +387,13 @@ if (backToTopButton) {
 
         allProducts = inhouse.concat(partnerAll);
 
-        // Calculate dynamic pill counts across all 24 categories
+        // Dynamic category counts across 24 categories
         var catCounts = {};
         allProducts.forEach(function(p) {
             catCounts[p._slug] = (catCounts[p._slug] || 0) + 1;
         });
 
-        document.querySelectorAll(".cat-btn[data-cat]").forEach(function(btn) {
+        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
             var slug = btn.getAttribute("data-cat");
             var countEl = btn.querySelector(".cat-count");
             if (!countEl) return;
@@ -388,17 +405,58 @@ if (backToTopButton) {
             }
         });
 
+        // Dynamic brand counts across 14 brands
+        var brandCounts = {};
+        var totalBranded = 0;
+        allProducts.forEach(function(p) {
+            if (p._brandSlug && p._brandSlug !== "inhouse") {
+                brandCounts[p._brandSlug] = (brandCounts[p._brandSlug] || 0) + 1;
+                totalBranded++;
+            }
+        });
+
+        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
+            var slug = btn.getAttribute("data-brand");
+            var countEl = btn.querySelector(".cat-count");
+            if (!countEl) return;
+            if (slug === "all") {
+                countEl.textContent = totalBranded.toLocaleString();
+            } else {
+                var n = brandCounts[slug] || 0;
+                countEl.textContent = n.toLocaleString();
+            }
+        });
+
         var search = document.getElementById("productSearch");
         if (search) {
-            search.placeholder = "Search " + allProducts.length.toLocaleString() + " items by Product Name, SKU (e.g. POR-3404, LBS-201, SP-IH-001), Brand, or Category...";
+            search.placeholder = "Search " + allProducts.length.toLocaleString() + " items by Product Name, Brand (e.g. Portronics, JBL, Borosil), Category, or SKU...";
         }
 
         // Category pills click
-        document.querySelectorAll(".cat-btn[data-cat]").forEach(function(btn) {
+        document.querySelectorAll(".cat-btn[data-cat]:not(.brand-btn)").forEach(function(btn) {
             btn.addEventListener("click", function() {
-                document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
+                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
                 btn.classList.add("active");
                 window._activeCat = btn.getAttribute("data-cat");
+                window._activeBrand = "all";
+                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
+                var allBrandBtn = document.querySelector(".brand-btn[data-brand='all']");
+                if (allBrandBtn) allBrandBtn.classList.add("active");
+                applyFilters();
+            });
+        });
+
+        // Brand pills click
+        document.querySelectorAll(".brand-btn[data-brand]").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
+                btn.classList.add("active");
+                var bSlug = btn.getAttribute("data-brand");
+                window._activeBrand = bSlug;
+                window._activeCat = "all";
+                document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
+                var allCatBtn = document.querySelector(".cat-btn[data-cat='all']:not(.brand-btn)");
+                if (allCatBtn) allCatBtn.classList.add("active");
                 applyFilters();
             });
         });
@@ -428,14 +486,38 @@ if (backToTopButton) {
         }
 
         window._activeCat = "all";
+        window._activeBrand = "all";
         window._activeType = "all";
         applyFilters();
     }
 
+    window.switchFilterMode = function(mode) {
+        var catBar = document.getElementById("categoryFilterBar");
+        var brandBar = document.getElementById("brandFilterBar");
+        var btnCat = document.getElementById("btnModeCategories");
+        var btnBrand = document.getElementById("btnModeBrands");
+
+        if (mode === "brands") {
+            if (catBar) catBar.style.display = "none";
+            if (brandBar) brandBar.style.display = "flex";
+            if (btnCat) btnCat.classList.remove("active");
+            if (btnBrand) btnBrand.classList.add("active");
+        } else {
+            if (catBar) catBar.style.display = "flex";
+            if (brandBar) brandBar.style.display = "none";
+            if (btnCat) btnCat.classList.add("active");
+            if (btnBrand) btnBrand.classList.remove("active");
+        }
+    };
+
     window.resetAllFilters = function() {
-        document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
-        var allBtn = document.querySelector(".cat-btn[data-cat=\"all\"]");
-        if (allBtn) allBtn.classList.add("active");
+        document.querySelectorAll(".cat-btn:not(.brand-btn)").forEach(function(b) { b.classList.remove("active"); });
+        var allCatBtn = document.querySelector(".cat-btn[data-cat=\"all\"]:not(.brand-btn)");
+        if (allCatBtn) allCatBtn.classList.add("active");
+
+        document.querySelectorAll(".brand-btn").forEach(function(b) { b.classList.remove("active"); });
+        var allBrandBtn = document.querySelector(".brand-btn[data-brand=\"all\"]");
+        if (allBrandBtn) allBrandBtn.classList.add("active");
 
         var s = document.getElementById("productSearch");
         if (s) s.value = "";
@@ -443,6 +525,7 @@ if (backToTopButton) {
         if (clearBtn) clearBtn.style.display = "none";
 
         window._activeCat = "all";
+        window._activeBrand = "all";
         window._activeType = "all";
         applyFilters();
     };

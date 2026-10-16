@@ -481,7 +481,7 @@
             position: relative;
         }
 
-        .product-card img {
+        .product-card .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -489,7 +489,7 @@
             padding: 12px;
         }
 
-        .product-card:hover img {
+        .product-card:hover .img-wrapper img {
             transform: scale(1.08);
         }
 
@@ -1265,21 +1265,38 @@
         }
     
         .filter-brand-logo {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            display: inline-block;
-            vertical-align: middle;
-            flex-shrink: 0;
-            margin-right: 2px;
+            width: 18px !important;
+            height: 18px !important;
+            max-width: 18px !important;
+            max-height: 18px !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
+            margin-right: 4px !important;
+            padding: 0 !important;
         }
+        .product-card .card-brand-logo,
+        .brand-subtitle .card-brand-logo,
         .card-brand-logo {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-            display: inline-block;
-            vertical-align: middle;
-            flex-shrink: 0;
+            width: 16px !important;
+            height: 16px !important;
+            max-width: 16px !important;
+            max-height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 3px !important;
+            transform: none !important;
+            transition: none !important;
+        }
+        .product-card:hover .card-brand-logo {
+            transform: none !important;
         }
         .brand-name-wrapper {
             display: inline-flex;
@@ -4453,21 +4470,38 @@
 @media(prefers-reduced-motion:reduce){#sp-box.open{animation:none}}
 
         .filter-brand-logo {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            display: inline-block;
-            vertical-align: middle;
-            flex-shrink: 0;
-            margin-right: 2px;
+            width: 18px !important;
+            height: 18px !important;
+            max-width: 18px !important;
+            max-height: 18px !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
+            margin-right: 4px !important;
+            padding: 0 !important;
         }
+        .product-card .card-brand-logo,
+        .brand-subtitle .card-brand-logo,
         .card-brand-logo {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-            display: inline-block;
-            vertical-align: middle;
-            flex-shrink: 0;
+            width: 16px !important;
+            height: 16px !important;
+            max-width: 16px !important;
+            max-height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 3px !important;
+            transform: none !important;
+            transition: none !important;
+        }
+        .product-card:hover .card-brand-logo {
+            transform: none !important;
         }
         .brand-name-wrapper {
             display: inline-flex;

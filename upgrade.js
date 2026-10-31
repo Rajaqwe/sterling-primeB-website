@@ -3,7 +3,7 @@
 /* Add REAL clients/testimonials here; sections stay hidden while these are empty.
    CLIENTS=[{name:'Acme Ltd',logo:'raw%20images/clients/acme.png'}]  TESTIMONIALS=[{quote:'...',who:'Name, Role, Company'}] */
 var CLIENTS=[],TESTIMONIALS=[];
-var BRANDS=['boAt','Noise','JBL','Portronics','Borosil','Milton','Wonderchef','Lifelong','Pebble','Samsonite','Adidas','Cross','Carlton London','Ferns N Petals','Procter'];
+var BRANDS=['boAt','Noise','JBL','Portronics','Borosil','Milton','Wonderchef','Lifelong','Pebble','Samsonite','Adidas','Cross','Carlton London'];
 var TILES=[['Employee joining kits','🎒','employee-onboarding-kits'],['Festive & Diwali hampers','🪔','festive-hampers-gourmet'],['Healthcare & pharma','⚕️','healthcare-medical'],['Awards & recognition','🏆','trophies-awards-medals'],['Executive gift sets','🎁','executive-combo-sets'],['Tech & gadgets','🔌','smart-tech-accessories']];
 var EMAIL='pmanji2@gmail.com',WA='917041614713',KEY='sp_quote_v1',Q=[];
 try{Q=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}

@@ -127,7 +127,7 @@ if (backToTopButton) {
                 _slug: slug,
                 _brandSlug: "inhouse",
                 _name: (c.getAttribute("data-name") || "").toLowerCase(),
-                _brand: (c.getAttribute("data-brand") || "sterling prime in-house").toLowerCase(),
+                _brand: (c.getAttribute("data-brand") || "sterling prime").toLowerCase(),
                 _sku: sku.toLowerCase(),
                 _catName: catName.toLowerCase(),
                 _type: "inhouse"
